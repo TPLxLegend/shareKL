@@ -8,6 +8,7 @@ public class PlayerController : Singleton<PlayerController>
     //public PlayerInput playerInput;
     public InputManagement input;
     [SerializeField] GameObject playerPrefab;
+    public GameObject player;
     public playerInfo playerInfo;
 
     [SerializeField]
@@ -28,8 +29,7 @@ public class PlayerController : Singleton<PlayerController>
     }
     void Start()
     {
-        //NetworkManager.Singleton.StartHost();
-        //loadPlayer();
+
         input.Player.Move.performed += MoveControl;
         input.Player.Move.canceled += Move_canceled;
         input.Player.Atk.performed += AtkControl;
@@ -74,6 +74,7 @@ public class PlayerController : Singleton<PlayerController>
         Vector2 JoyMoveValue = context.ReadValue<Vector2>();
         controllReceivingSystem.MoveMent(context);
 
+
     }
     public void AtkControl(InputAction.CallbackContext context)
     {
@@ -90,11 +91,12 @@ public class PlayerController : Singleton<PlayerController>
     {
 
         // player = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject;
-        var player=Instantiate(playerPrefab);
+        var player = Instantiate(playerPrefab);
         player.GetComponent<NetworkObject>().Spawn();
+        this.player = player;
         playerInfo = player.GetComponent<playerInfo>();
         controller = gameObject.GetComponent<CharacterController>();
-        hpBar.Instance.Value = playerInfo.hp / playerInfo.maxHP;
+        hpBar.Instance.Value = playerInfo.hp.Value / playerInfo.maxHP;
     }
 
 }
