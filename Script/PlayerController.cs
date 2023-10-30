@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : Singleton<PlayerController>
 {
     public CharacterController controller;
-    public PlayerInput playerInput;
+    //public PlayerInput playerInput;
     public InputManagement input;
     [SerializeField] GameObject playerPrefab;
     public playerInfo playerInfo;
@@ -28,10 +28,12 @@ public class PlayerController : Singleton<PlayerController>
     }
     void Start()
     {
-        NetworkManager.Singleton.StartHost();
-        loadPlayer();
+        //NetworkManager.Singleton.StartHost();
+        //loadPlayer();
         input.Player.Move.performed += MoveControl;
         input.Player.Move.canceled += Move_canceled;
+        input.Player.Atk.performed += AtkControl;
+        input.Player.Atk.canceled += AtkCancle;
 
         // playerInput = gameObject.GetComponent<PlayerInput>();
 
@@ -52,7 +54,7 @@ public class PlayerController : Singleton<PlayerController>
         /////
         //controller.Move(playerVelocity * Time.deltaTime * playerSpeed);
     }
-    public override void OnDestroy()
+    protected override void OnDestroy()
     {
         base.OnDestroy();
         input.Player.Move.performed -= MoveControl;
@@ -71,8 +73,15 @@ public class PlayerController : Singleton<PlayerController>
     {
         Vector2 JoyMoveValue = context.ReadValue<Vector2>();
         controllReceivingSystem.MoveMent(context);
-       //playerVelocity = Camera.main.transform.rotation * (new Vector3(JoyMoveValue.x, 0f, JoyMoveValue.y));
 
+    }
+    public void AtkControl(InputAction.CallbackContext context)
+    {
+        controllReceivingSystem.Atk(context);
+    }
+    public void AtkCancle(InputAction.CallbackContext context)
+    {
+        controllReceivingSystem.cancleAtk();
     }
 
     #endregion

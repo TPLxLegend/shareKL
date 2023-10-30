@@ -20,6 +20,8 @@ public class ControllReceivingSystem : MonoBehaviour
     private float turnSmoothtime = 0.1f;
     [SerializeField]
     private float turnSmoothVelocity = 0.0f;
+    [SerializeField]
+    private bool lockControl = false;
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -49,6 +51,14 @@ public class ControllReceivingSystem : MonoBehaviour
             }
         }
     }
+    public void LockControl(bool lockc)
+    {
+        lockControl = lockc;
+    }
+    public bool IsLockControl()
+    {
+        return lockControl;
+    }
 
 
     //Cac method PlayerControler goi////////////////////////////////////////////////////////////////////////////
@@ -60,6 +70,15 @@ public class ControllReceivingSystem : MonoBehaviour
     public void cancleMovement()
     {
         curCharacterControl.cancleMovement();
+    }
+    public void Atk(InputAction.CallbackContext context)
+    {
+        curCharacterControl.UseAttack(context);
+
+    }
+    public void cancleAtk()
+    {
+        
     }
 
 
