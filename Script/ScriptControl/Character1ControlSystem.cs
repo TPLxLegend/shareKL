@@ -14,6 +14,7 @@ public class Character1ControlSystem : CharacterControlSystem
     // Animator Paremeter
     [SerializeField]
     private Animator animator;
+
     //
 
     [SerializeField]
@@ -28,20 +29,22 @@ public class Character1ControlSystem : CharacterControlSystem
     [SerializeField] float maxTimeResetCombo = 3f;
     [SerializeField] float delayAni = 0.75f;
     [SerializeField] float delayCombo = 2f;
+    [SerializeField] private float dirFowardJump = 0f;
 
     private void Awake()
     {
-        controllReceivingSystem = transform.parent.GetComponentInParent<ControllReceivingSystem>();
         animator = transform.GetComponent<Animator>();
+
+        controllReceivingSystem = transform.parent.GetComponentInParent<ControllReceivingSystem>();
     }
-    void Start()
-    {
-        
-    }
+    
+  
 
     // Update is called once per frame
     void Update()
     {
+        animator.SetBool("isGround", controllReceivingSystem.characterController.isGrounded);
+        animator.SetBool("fall", !controllReceivingSystem.characterController.isGrounded);
         CheckAtk();
         CheckDashSwap();
         if (isRun && CanRun())
@@ -66,6 +69,7 @@ public class Character1ControlSystem : CharacterControlSystem
         Vector2 JoyMoveValue = ctx.ReadValue<Vector2>();
         Vector3 direction = new Vector3(JoyMoveValue.x, 0f, JoyMoveValue.y); // tao huong di chuyen tu joystick
         targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg ; //tao goc di chuyen theo truc Y
+        dirFowardJump = targetAngle + Camera.main.transform.eulerAngles.y;
     }
     public override void cancleMovement()
     {
@@ -74,12 +78,21 @@ public class Character1ControlSystem : CharacterControlSystem
         animator.SetBool("isRun", false);
     }
 
-    public override void UseJump(InputAction.CallbackContext ctx) { }
+    public override void UseJump(InputAction.CallbackContext ctx) 
+    {
+        base.UseJump(ctx);
+        if (canJump())
+            Jump();
+    }
     public override void UseAttack(InputAction.CallbackContext ctx) 
     {
         base.UseAttack(ctx);
         if (CanAtk())
+        {
             Atk();
+            if (!controllReceivingSystem.characterController.isGrounded)
+                unGraviry();
+        }
     }
     public override void UseNormalSkill(InputAction.CallbackContext ctx) { }
     public override void UseBurstSkill(InputAction.CallbackContext ctx) { }
@@ -87,8 +100,9 @@ public class Character1ControlSystem : CharacterControlSystem
     //////////// Ham cua chinh no/////
     private bool CanRun()
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ATK") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.8f)  return false;
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.6f) return false;
+        if (!controllReceivingSystem.characterController.isGrounded) { return false; }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ATK") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.6f)  return false;
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.4f) return false;
         return true;
     }
     public void startMoveMent(float targetAngle)
@@ -108,7 +122,7 @@ public class Character1ControlSystem : CharacterControlSystem
     {
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ATK") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime< delayAni) return false;
         if (Time.time - lastComboTime < delayCombo) return false;
-        if(animator.GetCurrentAnimatorStateInfo(0).IsName("dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5f) return false;
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.4f) return false;
         return true;
     }
     private void Atk()
@@ -157,15 +171,38 @@ public class Character1ControlSystem : CharacterControlSystem
         }
     }
 
+    private bool canJump()
+    {
+        if(!controllReceivingSystem.characterController.isGrounded) { return false; }
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.4) { return false; }
+        if(animator.GetCurrentAnimatorStateInfo(0).IsTag("ATK") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.6) { return false; }
+        return true;
+    }
+    private void Jump()
+    {
+        animator.Play("Jump");
+        if(isRun)
+        {
+            controllReceivingSystem.Jump(dirFowardJump);
+        }
+        controllReceivingSystem.Jump(0f);
+    }
+    private void unGraviry()
+    {
+        Debug.Log("ungravity");
+    }
+
     private void OnAnimatorMove()
     {
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("dash")) 
         {
-            transform.parent.parent.position += animator.deltaPosition * 2f;
+            //transform.parent.parent.position += animator.deltaPosition * 2f;
+            controllReceivingSystem.apllyRootMotion(animator.deltaPosition * 500f);
         }
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ATK"))
         {
-            transform.parent.parent.position += animator.deltaPosition;
+            //transform.parent.parent.position += animator.deltaPosition;
+            controllReceivingSystem.apllyRootMotion(animator.deltaPosition * 350f);
         }
     }
 }

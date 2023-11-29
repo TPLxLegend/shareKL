@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
-public class PointFollowCharracter : MonoBehaviour
+public class PointFollowCharracter :Singleton<PointFollowCharracter>
 {
     [SerializeField]
     private Transform Target;
@@ -18,22 +15,46 @@ public class PointFollowCharracter : MonoBehaviour
     private Vector3 rotate;
     public float eulerAngX;
     private bool showCursor = false;
-    // Start is called before the first frame update
-    private void Awake()
-    {
-        
-    }
+    //Zoom camera
+    [SerializeField]
+    CinemachineVirtualCamera vcam;
+
+    [SerializeField]
+    private float speedScroll = 2f;
+    [SerializeField]
+    private float maxzoom = 50f;
+    [SerializeField]
+    private float minzoom = 30f;
+    [SerializeField]
+    private float nomalzoom = 40f;
+    [SerializeField]
+    private float turnsmoothTime = 0.15f;
+
+
+    private float turnsmoothVelocity = 0.0f;
+    private bool returnnomal = false;
+    public bool canZoom = true;
+
     void Start()
     {
-        Target = GameObject.Find("Players/TargetLook").transform;
-        controllReceivingSystem = GameObject.Find("Players").GetComponent<ControllReceivingSystem>();
+        /*
+        Target = GameObject.Find("Players(Clone)/TargetLook").transform;
+        controllReceivingSystem = GameObject.Find("Players(Clone)").GetComponent<ControllReceivingSystem>();
         PlayerController.Instance.input.Player.look.performed += ctx => { RotateCamera(ctx); };
         PlayerController.Instance.input.Player.look.canceled += ctx => { cancleRotateCamera(); };
         Debug.Log("character:" + PlayerController.Instance.input);
-
+        */
+       
+    }
+    public void trackPlayer(Transform target)
+    {
+        Target = target;
+        controllReceivingSystem = PlayerController.Instance.player.GetComponent<ControllReceivingSystem>();
+        PlayerController.Instance.input.Player.look.performed += ctx => { RotateCamera(ctx); };
+        PlayerController.Instance.input.Player.look.canceled += ctx => { cancleRotateCamera(); };
+        Debug.Log("character:" + PlayerController.Instance.input);
         ShowHideCursor(false);
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -44,6 +65,19 @@ public class PointFollowCharracter : MonoBehaviour
             showCursor = !showCursor;
             ShowHideCursor(showCursor);
         }
+
+        if (isBetween(vcam.m_Lens.FieldOfView, nomalzoom, 0.1f))
+        {
+            canZoom = true;
+            returnnomal = false;
+            vcam.m_Lens.FieldOfView = nomalzoom;
+        }
+        if ((Input.mouseScrollDelta.y != 0) && canZoom)
+            zoomCam();
+        if (Input.GetMouseButtonDown(2))
+            returnnomal = true;
+        if (returnnomal)
+            zoomCamNomal();
     }
 
     private void MouseRotateCamera()
@@ -81,7 +115,7 @@ public class PointFollowCharracter : MonoBehaviour
     }
     public void ShowHideCursor(bool showcursor)
     {
-        if(showcursor)
+        if (showcursor)
         {
             UnityEngine.Cursor.lockState = CursorLockMode.None;
             controllReceivingSystem.LockControl(true);
@@ -125,7 +159,27 @@ public class PointFollowCharracter : MonoBehaviour
         }
     }
 
-    private void cancleRotateCamera() 
+    private void cancleRotateCamera()
     {
+    }
+
+    public void zoomCam()
+    {
+        vcam.m_Lens.FieldOfView -= Input.mouseScrollDelta.y * speedScroll;
+        if (vcam.m_Lens.FieldOfView > maxzoom)
+            vcam.m_Lens.FieldOfView = maxzoom;
+        else if (vcam.m_Lens.FieldOfView < minzoom)
+            vcam.m_Lens.FieldOfView = minzoom;
+    }
+    public void zoomCamNomal()
+    {
+        vcam.m_Lens.FieldOfView = Mathf.SmoothDamp(vcam.m_Lens.FieldOfView, nomalzoom, ref turnsmoothVelocity, turnsmoothTime);
+        canZoom = false;
+    }
+
+
+    private bool isBetween(float x, float target, float diference)
+    {
+        return ((x > target - diference) && (x < target + diference));
     }
 }

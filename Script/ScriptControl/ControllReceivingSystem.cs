@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using static Cinemachine.AxisState;
 
 public class ControllReceivingSystem : MonoBehaviour
 {
     [SerializeField]
-    private CharacterControlSystem curCharacterControl; 
+    public CharacterControlSystem curCharacterControl; 
     // Start is called before the first frame update
-    [SerializeField]
-    private CharacterController characterController;
+    public CharacterController characterController;
 
+    public UnityEvent<CharacterControlSystem> onCurCharacterChange;
     
 
     //Gia tri
@@ -22,10 +23,29 @@ public class ControllReceivingSystem : MonoBehaviour
     private float turnSmoothVelocity = 0.0f;
     [SerializeField]
     private bool lockControl = false;
+    [SerializeField]
+    private float gravity = 9.81f;
+    [SerializeField]
+    private float _directionY = 0.0f;
+    [SerializeField]
+    private float jumpSpeed = 5f;
+    [SerializeField]
+    private bool forwardWhenJump = false;
+    [SerializeField]
+    private float forceForwardWhenJump = 0f;
+    private float dirForwardJump = 0f;
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+
         ReLoadCurCharacter();
+    }
+
+    private void OnEnable()
+    {
+       
+
     }
     void Start()
     {
@@ -35,7 +55,25 @@ public class ControllReceivingSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //Gravity
+        Vector3 jumpdirection = new Vector3(0f, 0f, 0f);
+        if (_directionY > -gravity)
+        {
+            _directionY -= gravity * Time.deltaTime;
+        }
+        jumpdirection.y = _directionY;
+        characterController.Move(jumpdirection * Time.deltaTime);
+        if(forwardWhenJump)
+        {
+            Vector3 moveDir = Quaternion.Euler(0f, dirForwardJump, 0f) * Vector3.forward;
+            characterController.Move(moveDir * forceForwardWhenJump * Time.deltaTime);
+            forceForwardWhenJump-=Time.deltaTime*0.5f;
+        }
+        if(characterController.isGrounded)
+        {
+            forwardWhenJump = false;
+            forceForwardWhenJump = 0f;
+        }
     }
     //Cac Method support cho chinh no///////////////////////////////////////////////////////////////////////////
     private void ReLoadCurCharacter()
@@ -47,6 +85,7 @@ public class ControllReceivingSystem : MonoBehaviour
             if (obj.gameObject.activeSelf == true)
             {
                 curCharacterControl=obj.gameObject.GetComponent<CharacterControlSystem>();
+                onCurCharacterChange.Invoke(curCharacterControl);
                 break;
             }
         }
@@ -80,6 +119,14 @@ public class ControllReceivingSystem : MonoBehaviour
     {
         
     }
+    public void Jump(InputAction.CallbackContext context)
+    {
+        curCharacterControl.UseJump(context);
+    }
+    public void cancleJump()
+    {
+
+    }
 
 
     // Cac Method Child call//////////////////////////////////////////////////////////////////////////////////////
@@ -92,5 +139,25 @@ public class ControllReceivingSystem : MonoBehaviour
     {
         Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
         characterController.Move(moveDir * speedMove * Time.deltaTime);
+    }
+    public void apllyRootMotion(Vector3 dir)
+    {
+        Vector3 dirFix = dir;
+        dirFix.y = 0f;
+        characterController.Move(dirFix * Time.deltaTime);
+    }
+    public void Jump(float dir)
+    {
+        _directionY = jumpSpeed;
+        if(dir == 0f) { return; }
+        forwardWhenJump = true;
+        forceForwardWhenJump = 5f;
+        dirForwardJump = dir;
+    }
+    public void teleport(Vector3 point)
+    {
+        characterController.enabled = false;
+        transform.position = point;
+        characterController.enabled = true;
     }
 }
