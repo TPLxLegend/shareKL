@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : Singleton<PlayerController>
+public class PlayerController : SingletonPersistent<PlayerController>
 {
     public CharacterController controller;
     //public PlayerInput playerInput;
@@ -57,9 +57,9 @@ public class PlayerController : Singleton<PlayerController>
         /////
         //controller.Move(playerVelocity * Time.deltaTime * playerSpeed);
     }
-    protected override void OnDestroy()
+    protected void OnDestroy()
     {
-        base.OnDestroy();
+        //base.OnDestroy();
         input.Player.Move.performed -= MoveControl;
         input.Player.Move.canceled -= Move_canceled;
         input.Player.Atk.performed -= AtkControl;
@@ -108,26 +108,26 @@ public class PlayerController : Singleton<PlayerController>
         if (player == null)
         {
             //player = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject;
-            player = Instantiate(playerPrefab, transform.position, transform.rotation);
-            player.GetComponent<NetworkObject>().Spawn();
+            serverFunction.Instance.playerPrefab = playerPrefab;
+            serverFunction.Instance.spawnPlayerServerRpc(transform.position, transform.rotation);
             Debug.LogError("khoi tao player tai vi tri " + transform.position);
             controller = player.GetComponent<CharacterController>();
-            PointFollowCharracter.Instance.trackPlayer(player.transform);
+
         }
 
-
         controllReceivingSystem = player.GetComponent<ControllReceivingSystem>();
+        PointFollowCharracter.Instance.trackPlayer(player.transform, controllReceivingSystem);
         controllReceivingSystem.onCurCharacterChange.AddListener(loadPlayerInfo);
 
 
         controller = gameObject.GetComponent<CharacterController>();
         loadPlayerInfo(controllReceivingSystem.curCharacterControl);
-
-        hpBar.Instance.load();
     }
     public void loadPlayerInfo(CharacterControlSystem value)
     {
         playerInfo = value.gameObject.GetComponent<playerInfo>();
+        hpBar.Instance.load();
+        manaBar.Instance.load();
     }
 
 }

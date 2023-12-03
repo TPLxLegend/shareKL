@@ -2,7 +2,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PointFollowCharracter :Singleton<PointFollowCharracter>
+public class PointFollowCharracter : Singleton<PointFollowCharracter>
 {
     [SerializeField]
     private Transform Target;
@@ -44,18 +44,20 @@ public class PointFollowCharracter :Singleton<PointFollowCharracter>
         PlayerController.Instance.input.Player.look.canceled += ctx => { cancleRotateCamera(); };
         Debug.Log("character:" + PlayerController.Instance.input);
         */
-       
+
     }
-    public void trackPlayer(Transform target)
+
+    public void trackPlayer(Transform target, ControllReceivingSystem controllReceivingSystem)
     {
         Target = target;
-        controllReceivingSystem = PlayerController.Instance.player.GetComponent<ControllReceivingSystem>();
+        this.controllReceivingSystem = controllReceivingSystem;
+        //controllReceivingSystem = PlayerController.Instance.player.GetComponent<ControllReceivingSystem>();
         PlayerController.Instance.input.Player.look.performed += ctx => { RotateCamera(ctx); };
         PlayerController.Instance.input.Player.look.canceled += ctx => { cancleRotateCamera(); };
         Debug.Log("character:" + PlayerController.Instance.input);
         ShowHideCursor(false);
     }
-    // Update is called once per frame
+
     void Update()
     {
         FollowCharacter();
