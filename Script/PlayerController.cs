@@ -109,7 +109,7 @@ public class PlayerController : SingletonPersistent<PlayerController>
         {
             //player = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject;
             serverFunction.Instance.playerPrefab = playerPrefab;
-            serverFunction.Instance.spawnPlayerServerRpc(transform.position, transform.rotation);
+            serverFunction.Instance.spawnPlayerServerRpc(transform.position, transform.rotation, NetworkManager.Singleton.LocalClientId);
             Debug.LogError("khoi tao player tai vi tri " + transform.position);
             controller = player.GetComponent<CharacterController>();
 
