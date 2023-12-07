@@ -8,12 +8,12 @@ public class PlayerController : SingletonPersistent<PlayerController>
     //public PlayerInput playerInput;
     public InputManagement input;
     [SerializeField] GameObject playerPrefab;
+    [SerializeField] NetworkObject CameraPre;
 
     public GameObject player;
     public playerInfo playerInfo;
 
-    [SerializeField]
-    private ControllReceivingSystem controllReceivingSystem;
+    public ControllReceivingSystem controllReceivingSystem;
 
 
     private Vector3 playerVelocity;
@@ -108,15 +108,16 @@ public class PlayerController : SingletonPersistent<PlayerController>
         if (player == null)
         {
             //player = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject;
-            serverFunction.Instance.playerPrefab = playerPrefab;
-            serverFunction.Instance.spawnPlayerServerRpc(transform.position, transform.rotation);
+            
+            serverFunction.Instance.spawnPlayerServerRpc(transform.position, transform.rotation, NetworkManager.Singleton.LocalClientId);
+           // serverFunction.Instance.SpawnNetObjServerRpc(transform.position, transform.rotation, netobjPre);
+
             Debug.LogError("khoi tao player tai vi tri " + transform.position);
             controller = player.GetComponent<CharacterController>();
 
         }
 
-        controllReceivingSystem = player.GetComponent<ControllReceivingSystem>();
-        PointFollowCharracter.Instance.trackPlayer(player.transform, controllReceivingSystem);
+        controllReceivingSystem=player.GetComponent<ControllReceivingSystem>();
         controllReceivingSystem.onCurCharacterChange.AddListener(loadPlayerInfo);
 
 

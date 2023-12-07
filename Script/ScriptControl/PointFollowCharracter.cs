@@ -44,13 +44,14 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
         PlayerController.Instance.input.Player.look.canceled += ctx => { cancleRotateCamera(); };
         Debug.Log("character:" + PlayerController.Instance.input);
         */
+        trackPlayer(PlayerController.Instance.player.transform);
 
     }
-
-    public void trackPlayer(Transform target, ControllReceivingSystem controllReceivingSystem)
+   
+    public void trackPlayer(Transform target)
     {
         Target = target;
-        this.controllReceivingSystem = controllReceivingSystem;
+        this.controllReceivingSystem = Target.GetComponent<ControllReceivingSystem>();//  controllReceivingSystem;
         //controllReceivingSystem = PlayerController.Instance.player.GetComponent<ControllReceivingSystem>();
         PlayerController.Instance.input.Player.look.performed += ctx => { RotateCamera(ctx); };
         PlayerController.Instance.input.Player.look.canceled += ctx => { cancleRotateCamera(); };
