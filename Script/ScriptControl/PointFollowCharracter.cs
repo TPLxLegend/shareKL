@@ -11,7 +11,7 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
     [SerializeField]
     private bool Control = true;
     private float sensitivity_y = -0.1f;
-    private float sensitivity_x = 0.01f;
+    private float sensitivity_x = 0.035f;
     private Vector3 rotate;
     public float eulerAngX;
     private bool showCursor = false;
