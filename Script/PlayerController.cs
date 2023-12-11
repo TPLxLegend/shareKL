@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : SingletonPersistent<PlayerController>
 {
     public CharacterController controller;
-    //public PlayerInput playerInput;
+
     public InputManagement input;
     [SerializeField] GameObject playerPrefab;
     [SerializeField] NetworkObject CameraPre;
@@ -81,8 +81,6 @@ public class PlayerController : SingletonPersistent<PlayerController>
     {
         Vector2 JoyMoveValue = context.ReadValue<Vector2>();
         controllReceivingSystem.MoveMent(context);
-
-
     }
     public void AtkControl(InputAction.CallbackContext context)
     {
@@ -107,22 +105,12 @@ public class PlayerController : SingletonPersistent<PlayerController>
     {
         if (player == null)
         {
-            //player = NetworkManager.Singleton.LocalClient.PlayerObject.gameObject;
-            
             serverFunction.Instance.spawnPlayerServerRpc(transform.position, transform.rotation, NetworkManager.Singleton.LocalClientId);
-           // serverFunction.Instance.SpawnNetObjServerRpc(transform.position, transform.rotation, netobjPre);
-
             Debug.LogError("khoi tao player tai vi tri " + transform.position);
-            controller = player.GetComponent<CharacterController>();
-
         }
 
-        controllReceivingSystem=player.GetComponent<ControllReceivingSystem>();
-        controllReceivingSystem.onCurCharacterChange.AddListener(loadPlayerInfo);
 
-
-        controller = gameObject.GetComponent<CharacterController>();
-        loadPlayerInfo(controllReceivingSystem.curCharacterControl);
+        // loadPlayerInfo(controllReceivingSystem.curCharacterControl);
     }
     public void loadPlayerInfo(CharacterControlSystem value)
     {
@@ -130,5 +118,11 @@ public class PlayerController : SingletonPersistent<PlayerController>
         hpBar.Instance.load();
         manaBar.Instance.load();
     }
-
+    public void setPlayerControllable(bool active)
+    {
+        controllReceivingSystem.enabled = active;
+        playerInfo.enabled = active;
+        controller.enabled = active;
+        if (active) input.Player.Enable(); else input.Player.Disable();
+    }
 }
