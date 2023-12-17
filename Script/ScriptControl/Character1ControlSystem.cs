@@ -183,9 +183,9 @@ public class Character1ControlSystem : CharacterControlSystem
         animator.Play("Jump");
         if(isRun)
         {
-            controllReceivingSystem.Jump(dirFowardJump);
+            controllReceivingSystem.Jump(dirFowardJump,5f);
         }
-        controllReceivingSystem.Jump(0f);
+        controllReceivingSystem.Jump(0f,5f);
     }
     private void unGraviry()
     {

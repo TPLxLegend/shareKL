@@ -81,6 +81,14 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
             returnnomal = true;
         if (returnnomal)
             zoomCamNomal();
+        if (controllReceivingSystem.isShoot)
+        {
+            ChangeShoulderOffset(0.4f);
+        }
+        else
+        {
+            ChangeShoulderOffset(0f);
+        }
     }
 
     private void MouseRotateCamera()
@@ -184,5 +192,16 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
     private bool isBetween(float x, float target, float diference)
     {
         return ((x > target - diference) && (x < target + diference));
+    }
+    private void ChangeShoulderOffset(float target)
+    {
+        if (isBetween(vcam.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.x, target, 0.005f))
+        {
+            vcam.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.x = target;
+        }
+        float tmp = vcam.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.x;
+        tmp = Mathf.Lerp(tmp, target, Time.deltaTime * 9f);
+        vcam.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.x = tmp;
+        
     }
 }

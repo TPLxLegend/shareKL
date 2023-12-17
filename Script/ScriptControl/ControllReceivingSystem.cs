@@ -17,8 +17,7 @@ public class ControllReceivingSystem : MonoBehaviour
     
 
     //Gia tri
-    [SerializeField]
-    private float turnSmoothtime = 0.1f;
+    private float turnSmoothtime = 0.04f;
     [SerializeField]
     private float turnSmoothVelocity = 0.0f;
     [SerializeField]
@@ -34,6 +33,13 @@ public class ControllReceivingSystem : MonoBehaviour
     [SerializeField]
     private float forceForwardWhenJump = 0f;
     private float dirForwardJump = 0f;
+
+    //Cho CameraCheck
+    public bool isShoot = false;
+
+    public float distanceCheck;
+    public Vector3 boxCheck;
+    public LayerMask layerCheck;
 
     private void Awake()
     {
@@ -115,9 +121,9 @@ public class ControllReceivingSystem : MonoBehaviour
         curCharacterControl.UseAttack(context);
 
     }
-    public void cancleAtk()
+    public void cancleAtk(InputAction.CallbackContext context)
     {
-        
+        curCharacterControl.cancleAttack(context);
     }
     public void Jump(InputAction.CallbackContext context)
     {
@@ -128,12 +134,33 @@ public class ControllReceivingSystem : MonoBehaviour
 
     }
 
+    public void Dash(InputAction.CallbackContext context)
+    {
+        curCharacterControl.UseDash(context);
+    }
+    public void cancleDash(InputAction.CallbackContext context)
+    {
+        curCharacterControl.cancleDash(context);
+    }
+    public  void ActionC(InputAction.CallbackContext context) 
+    {
+        curCharacterControl.ActionC(context);
+    }
+    public  void cancleC(InputAction.CallbackContext context) 
+    {
+        curCharacterControl.cancleC(context);
+    }
+
 
     // Cac Method Child call//////////////////////////////////////////////////////////////////////////////////////
     public void RotatePlayer(float targetAngle) //goc xoay theo truc Y
     {
         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothtime);
         transform.rotation = Quaternion.Euler(0f, angle, 0f);       
+    }
+    public void setRotatePlayer(float targetAngle)
+    {
+        transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
     }
     public void MovePlayer(float targetAngle, float speedMove) //goc di chuyen theo truc Y
     {
@@ -146,12 +173,19 @@ public class ControllReceivingSystem : MonoBehaviour
         dirFix.y = 0f;
         characterController.Move(dirFix * Time.deltaTime);
     }
-    public void Jump(float dir)
+    public void Jump(float dir, float force)
     {
         _directionY = jumpSpeed;
         if(dir == 0f) { return; }
         forwardWhenJump = true;
-        forceForwardWhenJump = 5f;
+        forceForwardWhenJump = force;
+        dirForwardJump = dir;
+    }
+    public void AddWindForce(float dir, float force, bool tmp)
+    {
+        _directionY += force;
+        forwardWhenJump = tmp;
+        forceForwardWhenJump = 3f;
         dirForwardJump = dir;
     }
     public void teleport(Vector3 point)
@@ -159,5 +193,26 @@ public class ControllReceivingSystem : MonoBehaviour
         characterController.enabled = false;
         transform.position = point;
         characterController.enabled = true;
+    }
+
+    public bool CheckGrounded()
+    {
+        if(Physics.BoxCast(transform.position,boxCheck,-transform.up, transform.rotation,distanceCheck,layerCheck)) return true;
+        return false;
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(transform.position, boxCheck);
+    }
+    public void ChangeRunShoot(bool tmp)
+    {
+        isShoot = tmp;
+    }
+
+    public void ResetTelePort()
+    {
+        curCharacterControl.ResetTele();
+        forwardWhenJump = false;
     }
 }

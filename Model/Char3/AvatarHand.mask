@@ -1,0 +1,291 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AvatarHand
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: ao
+    m_Weight: 0
+  - m_Path: aoc
+    m_Weight: 0
+  - m_Path: Armature
+    m_Weight: 0
+  - m_Path: Armature/ROOT
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/FK.leg.L
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/FK.leg.L/ROOT.foot.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/FK.leg.L/ROOT.foot.L/CON.toe.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/FK.leg.L/ROOT.foot.L/CON.toe.L/PIVOT.foot.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/FK.leg.L/ROOT.foot.L/CON.toe.L/PIVOT.foot.L/IK.foot.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/FK.leg.L/ROOT.foot.L/POLE.knee.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/FK.leg.R
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/FK.leg.R/ROOT.foot.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/FK.leg.R/ROOT.foot.R/CON.toe.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/FK.leg.R/ROOT.foot.R/CON.toe.R/PIVOT.foot.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/FK.leg.R/ROOT.foot.R/CON.toe.R/PIVOT.foot.R/IK.foot.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/FK.leg.R/ROOT.foot.R/POLE.knee.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head/IK.head
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head/IK.head/head
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head/IK.head/head/hair.000.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head/IK.head/head/hair.000.L/hair.001.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head/IK.head/head/hair.000.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head/IK.head/head/hair.000.R/hair.001.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head/IK.head/head/hair.002.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head/IK.head/head/hair.002.L/hair.003.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head/IK.head/head/hair.002.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head/IK.head/head/hair.002.R/hair.003.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head/IK.head/head/hair.004
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/FK.head/IK.head/head/hair.004/hair.005
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/neck
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/aoc.000.L
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/aoc.000.L/aoc.001.L
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/aoc.000.L/aoc.001.L/aoc.002.L
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/aoc.000.L/aoc.001.L/aoc.002.L/aoc.003.L
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/arm1.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/arm1.L/arm.body.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/arm1.L/arm2.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/arm1.L/arm2.L/arm2.body.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/arm1.L/arm2.L/arm3.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/arm1.L/arm2.L/arm3.L/arm3.body.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/a.000.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/a.000.L/a.001.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/a.000.L/a.001.L/a.002.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/b.000.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/b.000.L/b.001.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/b.000.L/b.001.L/b.002.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/c.000.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/c.000.L/c.001.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/c.000.L/c.001.L/c.002.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/CON.a.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/CON.b.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/CON.c.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/CON.d.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/CON.e.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/d.000.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/d.000.L/d.001.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/d.000.L/d.001.L/d.002.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/e.000.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/e.000.L/e.001.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/IK.hand.L/hand.L/e.000.L/e.001.L/e.002.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.L/FK.arm.L/POLE.elbow.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/aoc.000.R
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/aoc.000.R/aoc.001.R
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/aoc.000.R/aoc.001.R/aoc.002.R
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/aoc.000.R/aoc.001.R/aoc.002.R/aoc.003.R
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/arm1.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/arm1.R/arm.body.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/arm1.R/arm2.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/arm1.R/arm2.R/arm2.body.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/arm1.R/arm2.R/arm3.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/arm1.R/arm2.R/arm3.R/arm3.body.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/a.000.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/a.000.R/a.001.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/a.000.R/a.001.R/a.002.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/ammu
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/b.000.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/b.000.R/b.001.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/b.000.R/b.001.R/b.002.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/c.000.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/c.000.R/c.001.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/c.000.R/c.001.R/c.002.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/CON.a.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/CON.b.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/CON.c.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/CON.d.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/CON.e.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/d.000.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/d.000.R/d.001.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/d.000.R/d.001.R/d.002.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/e.000.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/e.000.R/e.001.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/e.000.R/e.001.R/e.002.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/IK.hand.R/hand.R/gun
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/shoulder.R/FK.arm.R/POLE.elbow.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/spine2.002
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/spine2.002/spine2.003
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/FK.spine/IK.spine/spine2/spine2.002/spine2.003/spine2.004
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/spine1
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/vay.000
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/vay.000/vay.001
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/vay.000/vay.001/vay.002
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/vay.003
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/vay.003/vay.004
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/vay.003/vay.004/vay.005
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/vay.007
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/vay.007/vay.008
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/hip/vay.007/vay.008/vay.009
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/leg1.L
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/leg1.L/leg2.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/leg1.L/leg2.L/foot.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/leg1.L/leg2.L/foot.L/toe.L
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/leg1.R
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/leg1.R/leg2.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/leg1.R/leg2.R/foot.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/leg1.R/leg2.R/foot.R/toe.R
+    m_Weight: 1
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/waist.L
+    m_Weight: 0
+  - m_Path: Armature/ROOT/Root.Rotate/ROOT.upper/waist.R
+    m_Weight: 0
+  - m_Path: body
+    m_Weight: 0
+  - m_Path: Face
+    m_Weight: 0
+  - m_Path: giay
+    m_Weight: 0
+  - m_Path: Gun
+    m_Weight: 0
+  - m_Path: Hair
+    m_Weight: 0
+  - m_Path: no
+    m_Weight: 0
+  - m_Path: Non
+    m_Weight: 0
+  - m_Path: vai
+    m_Weight: 0

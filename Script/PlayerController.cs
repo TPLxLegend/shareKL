@@ -37,7 +37,10 @@ public class PlayerController : SingletonPersistent<PlayerController>
         input.Player.Atk.canceled += AtkCancle;
         input.Player.Jump.performed += JumpControl;
         input.Player.Jump.canceled += JumpCancle;
-
+        input.Player.Dash.performed += Dash;
+        input.Player.Dash.canceled += cancleDash;
+        input.Player.C.performed += ActionC;
+        input.Player.C.canceled += cancleC;
         // playerInput = gameObject.GetComponent<PlayerInput>();
 
     }
@@ -66,6 +69,10 @@ public class PlayerController : SingletonPersistent<PlayerController>
         input.Player.Atk.canceled -= AtkCancle;
         input.Player.Jump.performed -= JumpControl;
         input.Player.Jump.canceled -= JumpCancle;
+        input.Player.Dash.performed -= Dash;
+        input.Player.Dash.canceled -= cancleDash;
+        input.Player.C.performed -= ActionC;
+        input.Player.C.canceled -= cancleC;
         input.Disable();
 
     }
@@ -88,7 +95,7 @@ public class PlayerController : SingletonPersistent<PlayerController>
     }
     public void AtkCancle(InputAction.CallbackContext context)
     {
-        controllReceivingSystem.cancleAtk();
+        controllReceivingSystem.cancleAtk(context);
     }
     public void JumpControl(InputAction.CallbackContext context)
     {
@@ -98,6 +105,22 @@ public class PlayerController : SingletonPersistent<PlayerController>
     {
         controllReceivingSystem.cancleJump();
     }
+    public void Dash(InputAction.CallbackContext context)
+    {
+        controllReceivingSystem.Dash(context);
+    }
+    public void cancleDash(InputAction.CallbackContext context)
+    {
+        controllReceivingSystem.cancleDash(context);
+    }
+    public void ActionC(InputAction.CallbackContext context)
+    {
+        controllReceivingSystem.ActionC(context);
+    }
+    public void cancleC(InputAction.CallbackContext context)
+    {
+        controllReceivingSystem.cancleC(context);
+    }
 
     #endregion
 
@@ -105,8 +128,9 @@ public class PlayerController : SingletonPersistent<PlayerController>
     {
         if (player == null)
         {
+            Debug.Log("call Rpc to instatiate player");
             serverFunction.Instance.spawnPlayerServerRpc(transform.position, transform.rotation, NetworkManager.Singleton.LocalClientId);
-            Debug.LogError("khoi tao player tai vi tri " + transform.position);
+
         }
 
 
