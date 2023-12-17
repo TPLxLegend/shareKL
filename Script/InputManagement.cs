@@ -176,6 +176,162 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""card"",
+            ""id"": ""6f64e074-5e40-4152-b022-4bafeceeee05"",
+            ""actions"": [
+                {
+                    ""name"": ""card1"",
+                    ""type"": ""Value"",
+                    ""id"": ""a794757e-797c-4d46-b715-31fe35ae4437"",
+                    ""expectedControlType"": ""Integer"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""card2"",
+                    ""type"": ""Button"",
+                    ""id"": ""e560db6e-1adc-4853-922a-907bf07f93b1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""card3"",
+                    ""type"": ""Button"",
+                    ""id"": ""a780bfe0-ba5a-42e7-b922-ff4e1d6ede0b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""card4"",
+                    ""type"": ""Button"",
+                    ""id"": ""82e02830-c7ef-45e7-aa13-6019ef2b497c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""card5"",
+                    ""type"": ""Button"",
+                    ""id"": ""e56f7fc9-7e46-47c3-bcf5-eb3bb6e7d474"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""card6"",
+                    ""type"": ""Button"",
+                    ""id"": ""2759adad-2bcf-4bd4-bc46-bf540c71f6e3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e7c7f475-21a0-4748-b544-784f5dccac94"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""card1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c977b064-3072-4651-9e1a-1fca9685f3eb"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""card2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b12ed040-8be5-49ed-9209-db31abbf9bba"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""card3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f7e81760-cb40-4c02-bc9d-e07878fd2594"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""card4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2f90d18d-478c-42f4-afac-b7563981b0cc"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""card5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b815f41e-0387-448b-8371-0e2ca7149103"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""card6"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""wish"",
+            ""id"": ""d89f6e64-4e7c-4a41-a9ec-d271c5f6e8f1"",
+            ""actions"": [
+                {
+                    ""name"": ""toogleWish"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf7b0333-83d9-431e-b99c-0fe3216be56d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""977ce47e-866f-4991-96e2-10e7e7f3dcdc"",
+                    ""path"": ""<Keyboard>/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""toogleWish"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -186,6 +342,17 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
         m_Player_look = m_Player.FindAction("look", throwIfNotFound: true);
         m_Player_Atk = m_Player.FindAction("Atk", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        // card
+        m_card = asset.FindActionMap("card", throwIfNotFound: true);
+        m_card_card1 = m_card.FindAction("card1", throwIfNotFound: true);
+        m_card_card2 = m_card.FindAction("card2", throwIfNotFound: true);
+        m_card_card3 = m_card.FindAction("card3", throwIfNotFound: true);
+        m_card_card4 = m_card.FindAction("card4", throwIfNotFound: true);
+        m_card_card5 = m_card.FindAction("card5", throwIfNotFound: true);
+        m_card_card6 = m_card.FindAction("card6", throwIfNotFound: true);
+        // wish
+        m_wish = asset.FindActionMap("wish", throwIfNotFound: true);
+        m_wish_toogleWish = m_wish.FindAction("toogleWish", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -313,11 +480,156 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // card
+    private readonly InputActionMap m_card;
+    private List<ICardActions> m_CardActionsCallbackInterfaces = new List<ICardActions>();
+    private readonly InputAction m_card_card1;
+    private readonly InputAction m_card_card2;
+    private readonly InputAction m_card_card3;
+    private readonly InputAction m_card_card4;
+    private readonly InputAction m_card_card5;
+    private readonly InputAction m_card_card6;
+    public struct CardActions
+    {
+        private @InputManagement m_Wrapper;
+        public CardActions(@InputManagement wrapper) { m_Wrapper = wrapper; }
+        public InputAction @card1 => m_Wrapper.m_card_card1;
+        public InputAction @card2 => m_Wrapper.m_card_card2;
+        public InputAction @card3 => m_Wrapper.m_card_card3;
+        public InputAction @card4 => m_Wrapper.m_card_card4;
+        public InputAction @card5 => m_Wrapper.m_card_card5;
+        public InputAction @card6 => m_Wrapper.m_card_card6;
+        public InputActionMap Get() { return m_Wrapper.m_card; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CardActions set) { return set.Get(); }
+        public void AddCallbacks(ICardActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CardActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CardActionsCallbackInterfaces.Add(instance);
+            @card1.started += instance.OnCard1;
+            @card1.performed += instance.OnCard1;
+            @card1.canceled += instance.OnCard1;
+            @card2.started += instance.OnCard2;
+            @card2.performed += instance.OnCard2;
+            @card2.canceled += instance.OnCard2;
+            @card3.started += instance.OnCard3;
+            @card3.performed += instance.OnCard3;
+            @card3.canceled += instance.OnCard3;
+            @card4.started += instance.OnCard4;
+            @card4.performed += instance.OnCard4;
+            @card4.canceled += instance.OnCard4;
+            @card5.started += instance.OnCard5;
+            @card5.performed += instance.OnCard5;
+            @card5.canceled += instance.OnCard5;
+            @card6.started += instance.OnCard6;
+            @card6.performed += instance.OnCard6;
+            @card6.canceled += instance.OnCard6;
+        }
+
+        private void UnregisterCallbacks(ICardActions instance)
+        {
+            @card1.started -= instance.OnCard1;
+            @card1.performed -= instance.OnCard1;
+            @card1.canceled -= instance.OnCard1;
+            @card2.started -= instance.OnCard2;
+            @card2.performed -= instance.OnCard2;
+            @card2.canceled -= instance.OnCard2;
+            @card3.started -= instance.OnCard3;
+            @card3.performed -= instance.OnCard3;
+            @card3.canceled -= instance.OnCard3;
+            @card4.started -= instance.OnCard4;
+            @card4.performed -= instance.OnCard4;
+            @card4.canceled -= instance.OnCard4;
+            @card5.started -= instance.OnCard5;
+            @card5.performed -= instance.OnCard5;
+            @card5.canceled -= instance.OnCard5;
+            @card6.started -= instance.OnCard6;
+            @card6.performed -= instance.OnCard6;
+            @card6.canceled -= instance.OnCard6;
+        }
+
+        public void RemoveCallbacks(ICardActions instance)
+        {
+            if (m_Wrapper.m_CardActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ICardActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CardActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CardActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public CardActions @card => new CardActions(this);
+
+    // wish
+    private readonly InputActionMap m_wish;
+    private List<IWishActions> m_WishActionsCallbackInterfaces = new List<IWishActions>();
+    private readonly InputAction m_wish_toogleWish;
+    public struct WishActions
+    {
+        private @InputManagement m_Wrapper;
+        public WishActions(@InputManagement wrapper) { m_Wrapper = wrapper; }
+        public InputAction @toogleWish => m_Wrapper.m_wish_toogleWish;
+        public InputActionMap Get() { return m_Wrapper.m_wish; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(WishActions set) { return set.Get(); }
+        public void AddCallbacks(IWishActions instance)
+        {
+            if (instance == null || m_Wrapper.m_WishActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_WishActionsCallbackInterfaces.Add(instance);
+            @toogleWish.started += instance.OnToogleWish;
+            @toogleWish.performed += instance.OnToogleWish;
+            @toogleWish.canceled += instance.OnToogleWish;
+        }
+
+        private void UnregisterCallbacks(IWishActions instance)
+        {
+            @toogleWish.started -= instance.OnToogleWish;
+            @toogleWish.performed -= instance.OnToogleWish;
+            @toogleWish.canceled -= instance.OnToogleWish;
+        }
+
+        public void RemoveCallbacks(IWishActions instance)
+        {
+            if (m_Wrapper.m_WishActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IWishActions instance)
+        {
+            foreach (var item in m_Wrapper.m_WishActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_WishActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public WishActions @wish => new WishActions(this);
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnAtk(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+    }
+    public interface ICardActions
+    {
+        void OnCard1(InputAction.CallbackContext context);
+        void OnCard2(InputAction.CallbackContext context);
+        void OnCard3(InputAction.CallbackContext context);
+        void OnCard4(InputAction.CallbackContext context);
+        void OnCard5(InputAction.CallbackContext context);
+        void OnCard6(InputAction.CallbackContext context);
+    }
+    public interface IWishActions
+    {
+        void OnToogleWish(InputAction.CallbackContext context);
     }
 }
