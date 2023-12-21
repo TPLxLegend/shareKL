@@ -33,6 +33,10 @@ public class Character2ControlSystem : CharacterControlSystem
     private float changeSpeed = 5f;
     public float targetRunspeed = 5f;
     public float targetRunStyle = 1f;
+    public float curBullet = 0f;
+    public float maxBullet = 50f;
+    public int shootOnSecond = 10;
+    private float lastTimeShoot = 0f;
 
     void Start()
     {
@@ -149,11 +153,13 @@ public class Character2ControlSystem : CharacterControlSystem
         runState = RunState.none;
         shootState = ShootState.none;
         dirShootRun = new Vector2(0f, 0f);
+        curBullet = maxBullet;
     }
 
     //////////// Ham cua chinh no/////
     private bool CanRun()
     {
+        if(playerstate != playerState.normal) { return false; }
         if (!controllReceivingSystem.characterController.isGrounded) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f) return false;
         return true;
@@ -207,6 +213,7 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         if (!controllReceivingSystem.CheckGrounded()) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9) { return false; }
+        if (curBullet < 1) { return false; }
         return true;
     }
     private void Jump()
@@ -250,12 +257,38 @@ public class Character2ControlSystem : CharacterControlSystem
         SetHoriVertiAnimatorRunShoot(dirShootRun.x, dirShootRun.y,false);
         animator.SetFloat("runShootEular", xAngle);
         controllReceivingSystem.RotatePlayer(Camera.main.transform.eulerAngles.y);
+        Shoot();
+    }
+    public void Shoot()
+    {
+        if (curBullet < 1)
+        {
+            endShoot();
+            return;
+        }
+        if(Time.time - lastTimeShoot > (1f/shootOnSecond))
+        {
+            lastTimeShoot = Time.time;
+            curBullet -= 1;
+            Debug.Log("Ban Ban Ban :)))");
+        }
+    }
+    public void ReLoadBullet()
+    {
+        animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 1f);
+        animator.Play("LayerHand.Reload");
+    }
+    public void  ReLoadBulletEnd()
+    {
+        animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
+        curBullet = maxBullet;
     }
     private void endShoot()
     {
         shootState = ShootState.none;
         CallToCameraMan(false);
-        animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
+        //animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
+        ReLoadBullet();
         animator.SetBool("isAtk", false);
     }
 
@@ -290,6 +323,15 @@ public class Character2ControlSystem : CharacterControlSystem
         animator.SetFloat("horizontal", Mathf.Lerp(tmpx, x, Time.deltaTime * 3f));
         animator.SetFloat("vertical", Mathf.Lerp(tmpy, y, Time.deltaTime * 3f));
     }
+
+    public void BehindTheWall(Vector3 SitPosition,float dirLookAt)
+    {
+        playerstate = playerState.BehindTheWall; 
+    }
+    public void cancleBehindTheWall()
+    {
+        playerstate = playerState.normal;
+    }
     public bool valueBetween(float value, float minValue, float maxValue)
     {
         if(value> Mathf.Min(minValue, maxValue) && value < Mathf.Max(minValue, maxValue)) return true;
@@ -310,12 +352,10 @@ public class Character2ControlSystem : CharacterControlSystem
     }
 
 }
-
-public enum playerState
+//PlayerState chia la 2 co che chinh: ban tu do va nap sau tuong
+public enum playerState 
 {
     normal,
-    shootRun,
-    ShootFastRun,
     BehindTheWall
 };
 public enum RunState

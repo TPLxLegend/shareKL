@@ -34,6 +34,9 @@ public class ControllReceivingSystem : MonoBehaviour
     private float forceForwardWhenJump = 0f;
     private float dirForwardJump = 0f;
 
+    private float DirmoveInputForWindForce; 
+    private bool ForwardWindForce = false;
+
     //Cho CameraCheck
     public bool isShoot = false;
 
@@ -69,16 +72,22 @@ public class ControllReceivingSystem : MonoBehaviour
         }
         jumpdirection.y = _directionY;
         characterController.Move(jumpdirection * Time.deltaTime);
-        if(forwardWhenJump)
+        if(forwardWhenJump && characterController.isGrounded==false) //co che move khi jump
         {
             Vector3 moveDir = Quaternion.Euler(0f, dirForwardJump, 0f) * Vector3.forward;
             characterController.Move(moveDir * forceForwardWhenJump * Time.deltaTime);
             forceForwardWhenJump-=Time.deltaTime*0.5f;
         }
+        if(forwardWhenJump == false && !CheckGrounded())
+        {
+            Vector3 moveDir = Quaternion.Euler(0f, DirmoveInputForWindForce, 0f) * Vector3.forward;
+            characterController.Move(moveDir * 3f * Time.deltaTime);
+        }
         if(characterController.isGrounded)
         {
             forwardWhenJump = false;
             forceForwardWhenJump = 0f;
+            _directionY = -1f;
         }
     }
     //Cac Method support cho chinh no///////////////////////////////////////////////////////////////////////////
@@ -110,11 +119,14 @@ public class ControllReceivingSystem : MonoBehaviour
     public void MoveMent(InputAction.CallbackContext context)
     {
         curCharacterControl.UseMovement(context);
-        
+        float targetAngle = Mathf.Atan2(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y) * Mathf.Rad2Deg;
+        DirmoveInputForWindForce = targetAngle + Camera.main.transform.eulerAngles.y;
+        ForwardWindForce = true;
     }
     public void cancleMovement()
     {
         curCharacterControl.cancleMovement();
+        ForwardWindForce = false;
     }
     public void Atk(InputAction.CallbackContext context)
     {
@@ -181,12 +193,12 @@ public class ControllReceivingSystem : MonoBehaviour
         forceForwardWhenJump = force;
         dirForwardJump = dir;
     }
-    public void AddWindForce(float dir, float force, bool tmp)
+    public void AddWindForce(float force)
     {
         _directionY += force;
-        forwardWhenJump = tmp;
         forceForwardWhenJump = 3f;
-        dirForwardJump = dir;
+        forwardWhenJump = ForwardWindForce;
+        dirForwardJump = DirmoveInputForWindForce;
     }
     public void teleport(Vector3 point)
     {
