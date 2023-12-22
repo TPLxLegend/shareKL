@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.VFX;
 using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class Character2ControlSystem : CharacterControlSystem
@@ -37,6 +38,8 @@ public class Character2ControlSystem : CharacterControlSystem
     public float maxBullet = 50f;
     public int shootOnSecond = 10;
     private float lastTimeShoot = 0f;
+    public LayerMask ignoreShoot;
+    private float timeCancleFisrtShoot = 0.05f;
 
     void Start()
     {
@@ -64,10 +67,10 @@ public class Character2ControlSystem : CharacterControlSystem
         //luu gia tri cho action Jump
         dirFowardJump = targetAngle + Camera.main.transform.eulerAngles.y;
     }
-    public override void UseMovement(InputAction.CallbackContext ctx) 
+    public override void UseMovement(InputAction.CallbackContext ctx)
     {
         base.UseMovement(ctx);
-        if(runState == RunState.none)
+        if (runState == RunState.none)
             runState = RunState.run;
         if (shootState == ShootState.fastRunShoots)
         {
@@ -79,25 +82,25 @@ public class Character2ControlSystem : CharacterControlSystem
         Vector2 JoyMoveValue = ctx.ReadValue<Vector2>();
         Vector3 direction = new Vector3(JoyMoveValue.x, 0f, JoyMoveValue.y); // tao huong di chuyen tu joystick
         targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg; //tao goc di chuyen theo truc Y
-        
+
     }
-    public override void cancleMovement() 
+    public override void cancleMovement()
     {
         base.cancleMovement();
         runState = RunState.none;
         animator.SetBool("isRun", false);
         dirShootRun = new Vector2(0f, 0f);
     }
-    public override void UseJump(InputAction.CallbackContext ctx) 
+    public override void UseJump(InputAction.CallbackContext ctx)
     {
         base.UseJump(ctx);
         if (canJump())
             Jump();
     }
-    public override void UseAttack(InputAction.CallbackContext ctx) 
+    public override void UseAttack(InputAction.CallbackContext ctx)
     {
         base.UseAttack(ctx);
-        if(!CanATK()) return;
+        if (!CanATK()) return;
         switch (runState)
         {
             case RunState.fastRun:
@@ -114,28 +117,28 @@ public class Character2ControlSystem : CharacterControlSystem
                 }
         }
     }
-    public override void cancleAttack(InputAction.CallbackContext ctx) 
-    { 
+    public override void cancleAttack(InputAction.CallbackContext ctx)
+    {
         base.cancleAttack(ctx);
         endShoot();
     }
     public override void UseNormalSkill(InputAction.CallbackContext ctx) { }
     public override void UseBurstSkill(InputAction.CallbackContext ctx) { }
-    public override void UseDash(InputAction.CallbackContext ctx) 
+    public override void UseDash(InputAction.CallbackContext ctx)
     {
-        if(!CanDash()) return;
+        if (!CanDash()) return;
         targetRunspeed = fastRunSpeed;
         targetRunStyle = 2f;
         runState = RunState.fastRun;
     }
-    public override void cancleDash(InputAction.CallbackContext ctx) 
+    public override void cancleDash(InputAction.CallbackContext ctx)
     {
         targetRunspeed = runSpeed;
         targetRunStyle = 1f;
-        if(runState == RunState.fastRun)
+        if (runState == RunState.fastRun)
             runState = RunState.run;
     }
-    public override void ActionC(InputAction.CallbackContext ctx) 
+    public override void ActionC(InputAction.CallbackContext ctx)
     {
         if (CanActionC())
             animator.Play("Dash");
@@ -159,7 +162,7 @@ public class Character2ControlSystem : CharacterControlSystem
     //////////// Ham cua chinh no/////
     private bool CanRun()
     {
-        if(playerstate != playerState.normal) { return false; }
+        if (playerstate != playerState.normal) { return false; }
         if (!controllReceivingSystem.characterController.isGrounded) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f) return false;
         return true;
@@ -168,7 +171,7 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         if (controllReceivingSystem.IsLockControl()) { return; }
         animator.SetBool("isRun", true);
-        if(shootState == ShootState.runShoot)
+        if (shootState == ShootState.runShoot)
         {
             controllReceivingSystem.MovePlayer(targetAngle + Camera.main.transform.eulerAngles.y, runShootMoveSpeed);
             return;
@@ -188,8 +191,8 @@ public class Character2ControlSystem : CharacterControlSystem
             moveSpeed = targetRunspeed;
             return;
         }
-        moveSpeed = Mathf.Lerp(moveSpeed, targetRunspeed,Time.deltaTime * changeSpeed);
-        runStyle = Mathf.Lerp(runStyle,targetRunStyle,Time.deltaTime * changeSpeed);
+        moveSpeed = Mathf.Lerp(moveSpeed, targetRunspeed, Time.deltaTime * changeSpeed);
+        runStyle = Mathf.Lerp(runStyle, targetRunStyle, Time.deltaTime * changeSpeed);
     }
     public bool CanDash()
     {
@@ -198,7 +201,7 @@ public class Character2ControlSystem : CharacterControlSystem
     }
     public bool CanActionC()
     {
-        if(animator.GetCurrentAnimatorStateInfo(0).IsName("RunStyleBlend") && runState==RunState.fastRun) return true;
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("RunStyleBlend") && runState == RunState.fastRun) return true;
         return false;
     }
     private bool canJump()
@@ -219,22 +222,22 @@ public class Character2ControlSystem : CharacterControlSystem
     private void Jump()
     {
         animator.Play("Jump");
-        if (runState ==RunState.run || runState == RunState.fastRun)
+        if (runState == RunState.run || runState == RunState.fastRun)
         {
-            controllReceivingSystem.Jump(dirFowardJump,moveSpeed+2f);
+            controllReceivingSystem.Jump(dirFowardJump, moveSpeed + 2f);
             controllReceivingSystem.setRotatePlayer(dirFowardJump);
         }
-        controllReceivingSystem.Jump(0f,5f);
+        controllReceivingSystem.Jump(0f, 5f);
     }
     private void RunShoot(ShootState state)
     {
         animator.SetBool("isAtk", true);
-        if(state == ShootState.runShoot)
+        if (state == ShootState.runShoot)
             animator.Play("RunShoot");
         animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 1f);
-        if(state ==ShootState.runShoot)
+        if (state == ShootState.runShoot)
             animator.Play("LayerHand.RunShootUpper");
-        else if(state == ShootState.fastRunShoots)
+        else if (state == ShootState.fastRunShoots)
             animator.Play("LayerHand.FastRunShoot");
         // set goc ban -->
         float eulerAngX = Camera.main.transform.localEulerAngles.x;
@@ -254,11 +257,13 @@ public class Character2ControlSystem : CharacterControlSystem
             else
                 xAngle = -(180f + (((eulerAngX * (-1f)) + 180f) * (-1f)));
         }
-        SetHoriVertiAnimatorRunShoot(dirShootRun.x, dirShootRun.y,false);
+        SetHoriVertiAnimatorRunShoot(dirShootRun.x, dirShootRun.y, false);
         animator.SetFloat("runShootEular", xAngle);
         controllReceivingSystem.RotatePlayer(Camera.main.transform.eulerAngles.y);
         Shoot();
     }
+    [SerializeField] VisualEffect bulletVFX;
+    [SerializeField] Transform bulletTransform;
     public void Shoot()
     {
         if (curBullet < 1)
@@ -266,10 +271,34 @@ public class Character2ControlSystem : CharacterControlSystem
             endShoot();
             return;
         }
-        if(Time.time - lastTimeShoot > (1f/shootOnSecond))
+        if(timeCancleFisrtShoot>0)
+        {
+            timeCancleFisrtShoot -= Time.deltaTime;
+            return;
+        }
+        if (Time.time - lastTimeShoot > (1f / shootOnSecond))
         {
             lastTimeShoot = Time.time;
             curBullet -= 1;
+            GameObject bullet = Instantiate(bulletVFX.gameObject, bulletTransform.position, bulletTransform.rotation);
+            //bulletVFX.Play();
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 100f, ignoreShoot))
+            {
+                Debug.Log(hit.transform.name);
+            }
+            float r = (hit.point - bulletTransform.position).magnitude;
+            var vfx = bullet.GetComponent<VisualEffect>();
+            vfx.SetFloat("range", r);
+
+            
+            //var e = vfx.outputEventReceived;
+            //e += (a) =>
+            //{
+
+            //    Debug.Log("out event: "+a);
+            //};
             Debug.Log("Ban Ban Ban :)))");
         }
     }
@@ -278,7 +307,7 @@ public class Character2ControlSystem : CharacterControlSystem
         animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 1f);
         animator.Play("LayerHand.Reload");
     }
-    public void  ReLoadBulletEnd()
+    public void ReLoadBulletEnd()
     {
         animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
         curBullet = maxBullet;
@@ -290,12 +319,13 @@ public class Character2ControlSystem : CharacterControlSystem
         //animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
         ReLoadBullet();
         animator.SetBool("isAtk", false);
+        timeCancleFisrtShoot = 0.05f;
     }
 
     private void CallToCameraMan(bool isShoot)
     {
         controllReceivingSystem.ChangeRunShoot(isShoot);
-        
+
     }
 
     public bool CameraManCheckIsShoot()
@@ -310,7 +340,7 @@ public class Character2ControlSystem : CharacterControlSystem
             return ShootState.fastRunShoots;
         else return ShootState.runShoot;
     }
-    public void SetHoriVertiAnimatorRunShoot(float x, float y,bool tmpbool)
+    public void SetHoriVertiAnimatorRunShoot(float x, float y, bool tmpbool)
     {
         if (tmpbool)
         {
@@ -324,9 +354,9 @@ public class Character2ControlSystem : CharacterControlSystem
         animator.SetFloat("vertical", Mathf.Lerp(tmpy, y, Time.deltaTime * 3f));
     }
 
-    public void BehindTheWall(Vector3 SitPosition,float dirLookAt)
+    public void BehindTheWall(Vector3 SitPosition, float dirLookAt)
     {
-        playerstate = playerState.BehindTheWall; 
+        playerstate = playerState.BehindTheWall;
     }
     public void cancleBehindTheWall()
     {
@@ -334,7 +364,7 @@ public class Character2ControlSystem : CharacterControlSystem
     }
     public bool valueBetween(float value, float minValue, float maxValue)
     {
-        if(value> Mathf.Min(minValue, maxValue) && value < Mathf.Max(minValue, maxValue)) return true;
+        if (value > Mathf.Min(minValue, maxValue) && value < Mathf.Max(minValue, maxValue)) return true;
         return false;
     }
     private float NomalizeVectorInAnimator(float x)
@@ -353,7 +383,7 @@ public class Character2ControlSystem : CharacterControlSystem
 
 }
 //PlayerState chia la 2 co che chinh: ban tu do va nap sau tuong
-public enum playerState 
+public enum playerState
 {
     normal,
     BehindTheWall

@@ -34,7 +34,8 @@ public class ControllReceivingSystem : MonoBehaviour
     private float forceForwardWhenJump = 0f;
     private float dirForwardJump = 0f;
 
-    private float DirmoveInputForWindForce; 
+    private float DirmoveInputForWindForce;
+    private float forceFallFoward=0f;
     private bool ForwardWindForce = false;
 
     //Cho CameraCheck
@@ -81,7 +82,7 @@ public class ControllReceivingSystem : MonoBehaviour
         if(forwardWhenJump == false && !CheckGrounded())
         {
             Vector3 moveDir = Quaternion.Euler(0f, DirmoveInputForWindForce, 0f) * Vector3.forward;
-            characterController.Move(moveDir * 3f * Time.deltaTime);
+            characterController.Move(moveDir * forceFallFoward * Time.deltaTime);
         }
         if(characterController.isGrounded)
         {
@@ -122,11 +123,13 @@ public class ControllReceivingSystem : MonoBehaviour
         float targetAngle = Mathf.Atan2(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y) * Mathf.Rad2Deg;
         DirmoveInputForWindForce = targetAngle + Camera.main.transform.eulerAngles.y;
         ForwardWindForce = true;
+        forceFallFoward = 3f;
     }
     public void cancleMovement()
     {
         curCharacterControl.cancleMovement();
         ForwardWindForce = false;
+        forceFallFoward = 0f;
     }
     public void Atk(InputAction.CallbackContext context)
     {

@@ -19,7 +19,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 477
     y: -223
-    width: 1694
+    width: 2206
     height: 3298
 --- !u!114 &114350483966674976
 MonoBehaviour:
@@ -3908,7 +3908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UIIgnoredErrors: []
-  m_Parent: {fileID: 0}
+  m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
@@ -4406,7 +4406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UIIgnoredErrors: []
-  m_Parent: {fileID: 0}
+  m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
@@ -5391,7 +5391,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615046}
   m_ExposedName: range
   m_Exposed: 1
-  m_Order: 3
+  m_Order: 1
   m_Category: 
   m_Min:
     m_Type:
@@ -5471,7 +5471,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615048}
   m_ExposedName: speed
   m_Exposed: 1
-  m_Order: 4
+  m_Order: 2
   m_Category: 
   m_Min:
     m_Type:
@@ -6023,7 +6023,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615067}
   m_ExposedName: sizeExplode
   m_Exposed: 1
-  m_Order: 5
+  m_Order: 3
   m_Category: 
   m_Min:
     m_Type:
