@@ -129,7 +129,7 @@ public class PlayerController : SingletonPersistent<PlayerController>
         if (player == null)
         {
             Debug.Log("call Rpc to instatiate player");
-            serverFunction.Instance.spawnPlayerServerRpc(transform.position, transform.rotation, NetworkManager.Singleton.LocalClientId);
+            spawnPlayerSystem.Instance.spawnPlayerServerRpc(transform.position, transform.rotation, NetworkManager.Singleton.LocalClientId);
 
         }
 
