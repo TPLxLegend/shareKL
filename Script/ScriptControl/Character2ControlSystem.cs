@@ -224,7 +224,7 @@ public class Character2ControlSystem : CharacterControlSystem
         animator.Play("Jump");
         if (runState == RunState.run || runState == RunState.fastRun)
         {
-            controllReceivingSystem.Jump(dirFowardJump, moveSpeed + 2f);
+            controllReceivingSystem.Jump(dirFowardJump, moveSpeed + 1f);
             controllReceivingSystem.setRotatePlayer(dirFowardJump);
         }
         controllReceivingSystem.Jump(0f, 5f);
@@ -377,7 +377,7 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dash"))
         {
-            controllReceivingSystem.apllyRootMotion(animator.deltaPosition * 700f);
+            controllReceivingSystem.apllyRootMotion(animator.deltaPosition * 600f);
         }
     }
 
