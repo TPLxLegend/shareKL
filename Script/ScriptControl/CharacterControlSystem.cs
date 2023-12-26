@@ -18,4 +18,6 @@ abstract public class CharacterControlSystem : NetworkBehaviour// MonoBehaviour
     public virtual void ActionC(InputAction.CallbackContext ctx) { }
     public virtual void cancleC(InputAction.CallbackContext ctx) { }
     public virtual void ResetTele() { }
+    public virtual void BehindTheWall(Vector3 SitPosition, float dirLookAt) { }
+    public virtual void cancleBehindTheWall() { }
 }

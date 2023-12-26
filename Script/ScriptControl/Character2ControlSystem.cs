@@ -62,7 +62,7 @@ public class Character2ControlSystem : CharacterControlSystem
             startMoveMent(targetAngle);
         }
         ChangeFasrRun();
-        if (shootState != ShootState.none)
+        if (shootState != ShootState.none && playerstate==playerState.normal)
             RunShoot(shootState);
         //luu gia tri cho action Jump
         dirFowardJump = targetAngle + Camera.main.transform.eulerAngles.y;
@@ -75,6 +75,10 @@ public class Character2ControlSystem : CharacterControlSystem
         if (shootState == ShootState.fastRunShoots)
         {
             endShoot();
+        }
+        if(playerstate==playerState.BehindTheWall)
+        {
+            cancleBehindTheWall();
         }
         Vector2 tmpValue = ctx.ReadValue<Vector2>();
         dirShootRun.x = NomalizeVectorInAnimator(tmpValue.x);
@@ -141,7 +145,10 @@ public class Character2ControlSystem : CharacterControlSystem
     public override void ActionC(InputAction.CallbackContext ctx)
     {
         if (CanActionC())
+        {
             animator.Play("Dash");
+            controllReceivingSystem.isDash = true;
+        }     
     }
     public override void cancleC(InputAction.CallbackContext ctx) { }
 
@@ -208,8 +215,8 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         if (!controllReceivingSystem.CheckGrounded()) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9) { return false; }
-        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("BehindTheWall")) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ATK")) { return false; }
+        if (playerstate != playerState.normal) { return false; }
         return true;
     }
     private bool CanATK()
@@ -312,12 +319,17 @@ public class Character2ControlSystem : CharacterControlSystem
         animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
         curBullet = maxBullet;
     }
+    public void DashEnd()
+    {
+        controllReceivingSystem.isDash=false;
+    }
     private void endShoot()
     {
         shootState = ShootState.none;
         CallToCameraMan(false);
         //animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
-        ReLoadBullet();
+        if(curBullet != maxBullet)
+            ReLoadBullet();
         animator.SetBool("isAtk", false);
         timeCancleFisrtShoot = 0.05f;
     }
@@ -354,13 +366,16 @@ public class Character2ControlSystem : CharacterControlSystem
         animator.SetFloat("vertical", Mathf.Lerp(tmpy, y, Time.deltaTime * 3f));
     }
 
-    public void BehindTheWall(Vector3 SitPosition, float dirLookAt)
+    public override void BehindTheWall(Vector3 SitPosition, float dirLookAt)
     {
         playerstate = playerState.BehindTheWall;
+        //test
+        animator.Play("SitDown");
     }
-    public void cancleBehindTheWall()
+    public override void cancleBehindTheWall()
     {
         playerstate = playerState.normal;
+        controllReceivingSystem.cancleBehindTheWallChild();
     }
     public bool valueBetween(float value, float minValue, float maxValue)
     {

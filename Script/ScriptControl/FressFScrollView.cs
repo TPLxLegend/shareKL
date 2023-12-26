@@ -52,7 +52,6 @@ public class FressFScrollView : MonoBehaviour
             listItem.Clear();
             posHolderList = null;
             HolderSelected = null;
-            Debug.Log("list danh rongggggggggggggggggg");
             return;
         }
         if (Input.mouseScrollDelta.y != 0)

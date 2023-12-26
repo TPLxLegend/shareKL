@@ -1,4 +1,5 @@
 using Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,6 +31,10 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
     [SerializeField]
     private float turnsmoothTime = 0.15f;
 
+    //Rotate camera when behind the wall
+    private bool isBehind = false;
+    private float dirLookTarget;
+
 
     private float turnsmoothVelocity = 0.0f;
     private bool returnnomal = false;
@@ -47,12 +52,15 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
         trackPlayer(PlayerController.Instance.player.transform);
 
     }
-   
+
     public void trackPlayer(Transform target)
     {
         Target = target;
         this.controllReceivingSystem = Target.GetComponent<ControllReceivingSystem>();//  controllReceivingSystem;
         //controllReceivingSystem = PlayerController.Instance.player.GetComponent<ControllReceivingSystem>();
+        controllReceivingSystem.onBehindTheWallCalled.AddListener(
+            LookAtBehindTheWall
+            );
         PlayerController.Instance.input.Player.look.performed += ctx => { RotateCamera(ctx); };
         PlayerController.Instance.input.Player.look.canceled += ctx => { cancleRotateCamera(); };
         Debug.Log("character:" + PlayerController.Instance.input);
@@ -89,11 +97,23 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
         {
             ChangeShoulderOffset(0f);
         }
+        if(isBehind)
+        {
+            float tmp = transform.rotation.eulerAngles.y;
+            tmp = Mathf.Lerp(tmp, dirLookTarget, 0.1f);
+            transform.rotation = Quaternion.Euler(0f, tmp, 0f);
+            if (isBetween(transform.rotation.eulerAngles.y, dirLookTarget, 0.1f))
+            {
+                isBehind = false;
+            }
+
+        }
     }
 
     private void MouseRotateCamera()
     {
         if (controllReceivingSystem.IsLockControl()) { return; }
+        if (controllReceivingSystem.isBehindTheWall) { return; }
         Vector3 currotation = transform.rotation.eulerAngles;
         currotation.z = 0f;
         transform.rotation = Quaternion.Euler(currotation);
@@ -140,6 +160,7 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
     private void RotateCamera(InputAction.CallbackContext ctx)
     {
         if (controllReceivingSystem.IsLockControl()) { return; }
+        if (controllReceivingSystem.isBehindTheWall) { return; }
         Vector2 dir = ctx.ReadValue<Vector2>();
         Vector3 currotation = transform.rotation.eulerAngles;
         currotation.z = 0f;
@@ -187,6 +208,11 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
         vcam.m_Lens.FieldOfView = Mathf.SmoothDamp(vcam.m_Lens.FieldOfView, nomalzoom, ref turnsmoothVelocity, turnsmoothTime);
         canZoom = false;
     }
+    public void LookAtBehindTheWall(float dir)
+    {
+        isBehind = true;
+        dirLookTarget = dir;
+    }
 
 
     private bool isBetween(float x, float target, float diference)
@@ -202,6 +228,6 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
         float tmp = vcam.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.x;
         tmp = Mathf.Lerp(tmp, target, Time.deltaTime * 9f);
         vcam.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.x = tmp;
-        
+
     }
 }

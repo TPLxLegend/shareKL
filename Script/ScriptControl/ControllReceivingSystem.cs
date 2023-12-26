@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -40,6 +41,12 @@ public class ControllReceivingSystem : MonoBehaviour
 
     //Cho CameraCheck
     public bool isShoot = false;
+    //SetCamera when BehindTheWall
+    public bool isBehindTheWall = false;
+    public bool isBehindTheWallRote = false;
+    public float dirLookWhenBehindTheWall;
+    public Vector3 dirRotateWhenBehindTheWall;
+    public bool isDash = false;
 
     public float distanceCheck;
     public Vector3 boxCheck;
@@ -89,6 +96,20 @@ public class ControllReceivingSystem : MonoBehaviour
             forwardWhenJump = false;
             forceForwardWhenJump = 0f;
             _directionY = -1f;
+        }
+        if(isBehindTheWallRote)
+        {
+            float tmp = transform.rotation.eulerAngles.y;
+            tmp = Mathf.Lerp(tmp, dirLookWhenBehindTheWall, 0.1f);
+            transform.rotation = Quaternion.Euler(0f,tmp, 0f);
+            Vector3 tmpV3 = transform.position;
+            tmpV3 = Vector3.Lerp(tmpV3, dirRotateWhenBehindTheWall, 0.5f);
+            tmpV3.y = transform.position.y;
+            transform.position = tmpV3;
+            if (isBetween(transform.rotation.y, dirLookWhenBehindTheWall, 0.1f) && isBetweenV3(transform.position, dirRotateWhenBehindTheWall))
+            {
+                isBehindTheWallRote = false;
+            }
         }
     }
     //Cac Method support cho chinh no///////////////////////////////////////////////////////////////////////////
@@ -165,6 +186,20 @@ public class ControllReceivingSystem : MonoBehaviour
     {
         curCharacterControl.cancleC(context);
     }
+    public UnityEvent<float> onBehindTheWallCalled;
+    public void BehindTheWall(Vector3 SitPosition, float dirLookAt)
+    {
+        onBehindTheWallCalled.Invoke(dirLookAt);
+        curCharacterControl.BehindTheWall(SitPosition, dirLookAt);
+        //characterController.enabled = false;
+        //transform.position = SitPosition;
+        //transform.rotation = Quaternion.Euler(0f, dirLookAt, 0f);
+        //characterController.enabled = true;
+        isBehindTheWall = true;
+        isBehindTheWallRote = true;
+        dirLookWhenBehindTheWall = dirLookAt;
+        dirRotateWhenBehindTheWall = SitPosition;
+    }
 
 
     // Cac Method Child call//////////////////////////////////////////////////////////////////////////////////////
@@ -224,10 +259,25 @@ public class ControllReceivingSystem : MonoBehaviour
     {
         isShoot = tmp;
     }
+    public void cancleBehindTheWallChild()
+    {
+        isBehindTheWall = false;
+        isBehindTheWallRote = false;
+    }
 
     public void ResetTelePort()
     {
         curCharacterControl.ResetTele();
         forwardWhenJump = false;
+    }
+    private bool isBetween(float x, float target, float diference)
+    {
+        return ((x > target - diference) && (x < target + diference));
+    }
+    private bool isBetweenV3(Vector3 x, Vector3 target)
+    {
+        if (x.x > target.x + 0.1f || x.x < target.x - 0.1f) return false;
+        if (x.z > target.z + 0.1f || x.z < target.z - 0.1f) return false;
+        return true;
     }
 }
