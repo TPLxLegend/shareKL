@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class Character2ControlSystem : CharacterControlSystem
 {
@@ -269,7 +265,7 @@ public class Character2ControlSystem : CharacterControlSystem
         controllReceivingSystem.RotatePlayer(Camera.main.transform.eulerAngles.y);
         Shoot();
     }
-    [SerializeField] VisualEffect bulletVFX;
+    [SerializeField] GameObject bulletVFX;
     [SerializeField] Transform bulletTransform;
     public void Shoot()
     {
@@ -278,7 +274,7 @@ public class Character2ControlSystem : CharacterControlSystem
             endShoot();
             return;
         }
-        if(timeCancleFisrtShoot>0)
+        if (timeCancleFisrtShoot > 0)
         {
             timeCancleFisrtShoot -= Time.deltaTime;
             return;
@@ -288,25 +284,46 @@ public class Character2ControlSystem : CharacterControlSystem
             lastTimeShoot = Time.time;
             curBullet -= 1;
             GameObject bullet = Instantiate(bulletVFX.gameObject, bulletTransform.position, bulletTransform.rotation);
-            //bulletVFX.Play();
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100f, ignoreShoot))
             {
-                Debug.Log(hit.transform.name);
+                Debug.Log("shooting hit point: " + hit.point + " name:" + hit.transform.name);
             }
-            float r = (hit.point - bulletTransform.position).magnitude;
+            else
+            {
+                Debug.Log("shooting not hit every thing");
+            }
+            var direction = (hit.point - bullet.transform.position).normalized;//bulletVFX.transform.forward;
+
             var vfx = bullet.GetComponent<VisualEffect>();
-            vfx.SetFloat("range", r);
+            GameObject bulletParticle = bullet.transform.GetChild(0).gameObject;
+            skillObj bulletScript = bulletParticle.AddComponent<skillObj>();
+            bulletScript.onUpdate = new UnityEngine.Events.UnityEvent<skillObj>();
+            bulletScript.collisionEnter = new UnityEngine.Events.UnityEvent<GameObject, GameObject>();
 
-            
-            //var e = vfx.outputEventReceived;
-            //e += (a) =>
-            //{
+            bulletScript.onUpdate.AddListener((self) =>
+            {
+                if (self.canMove)
+                {
+                    self.gameObject.transform.position += direction * 5f * Time.deltaTime;
+                }
+            });
+            bulletScript.collisionEnter.AddListener((selfGO, collideGO) =>
+            {
+                if (collideGO.TryGetComponent(out characterInfo info))
+                {
+                    var plinfo = PlayerController.Instance.playerInfo;
 
-            //    Debug.Log("out event: "+a);
-            //};
-            Debug.Log("Ban Ban Ban :)))");
+                    info.takeDamage(plinfo.attack, DmgType.Physic);
+                }
+                vfx.SendEvent("onExplode");
+                //vfx.SetBool("isFollowTf", false);
+                Destroy(selfGO);
+            });
+            Destroy(bullet, 20);
+
         }
     }
     public void ReLoadBullet()
