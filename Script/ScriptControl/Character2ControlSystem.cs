@@ -166,6 +166,7 @@ public class Character2ControlSystem : CharacterControlSystem
     private bool CanRun()
     {
         if (playerstate != playerState.normal) { return false; }
+
         if (!controllReceivingSystem.characterController.isGrounded) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f) return false;
         return true;
@@ -283,7 +284,7 @@ public class Character2ControlSystem : CharacterControlSystem
         {
             lastTimeShoot = Time.time;
             curBullet -= 1;
-            GameObject bullet = Instantiate(bulletVFX.gameObject, bulletTransform.position, bulletTransform.rotation);
+            GameObject bullet = Instantiate(bulletVFX, bulletTransform.position, bulletTransform.rotation);
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
 
             RaycastHit hit;

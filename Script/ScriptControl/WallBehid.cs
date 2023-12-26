@@ -5,15 +5,11 @@ using UnityEngine;
 
 public class WallBehid : ItemAction
 {
-    public GameObject ContentUI;
-    public FressFScrollView pressF;
     public ControllReceivingSystem player;
     public bool isUsing = false;
     private void Start()
     {
         baseDeception = gameObject.name;
-        ContentUI = GameObject.Find("CanvasF/Scroll View/Viewport/Content");
-        pressF = ContentUI.GetComponent<FressFScrollView>();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -29,9 +25,9 @@ public class WallBehid : ItemAction
                 }    
             }
 
-            if (pressF != null && !isUsing )
+            if (FressFScrollView.instance != null && !isUsing )
             {
-                pressF.AddItem(this);
+                FressFScrollView.instance.AddItem(this);
             }
         }
     }
@@ -39,9 +35,9 @@ public class WallBehid : ItemAction
     {
         if (other.gameObject.tag == "Player")
         {
-            if (pressF != null)
+            if (FressFScrollView.instance != null)
             {
-                pressF.RemoveItem(this);
+                FressFScrollView.instance.RemoveItem(this);
             }
             leaveWall();
         }
@@ -53,9 +49,9 @@ public class WallBehid : ItemAction
         {
             player.BehindTheWall(transform.position, transform.eulerAngles.y);
         }
-        if (pressF != null)
+        if (FressFScrollView.instance != null)
         {
-            pressF.RemoveItem(this);
+            FressFScrollView.instance.RemoveItem(this);
         }
         isUsing = true;
     }

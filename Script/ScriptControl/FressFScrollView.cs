@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class FressFScrollView : MonoBehaviour
 {
-    
+    public static FressFScrollView instance;
+
     public Scrollbar scrollBar;
     public GameObject HolderSelected;// de su li nhan F
     public int numberSelected;
@@ -26,6 +27,7 @@ public class FressFScrollView : MonoBehaviour
     public Sprite tmps;
     void Start()
     {  
+        if(instance == null) instance = this;
         ChangedList();
         PlayerController.Instance.input.Player.FressF.performed += PressFItem;
     }
