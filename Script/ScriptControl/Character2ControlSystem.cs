@@ -1,13 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Cinemachine;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
-using UnityEngine.VFX.Utility;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class Character2ControlSystem : CharacterControlSystem
 {
@@ -289,16 +282,14 @@ public class Character2ControlSystem : CharacterControlSystem
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100f, ignoreShoot))
             {
-                Debug.Log("hit point: " + hit.point + " name:" + hit.transform.name);
+                Debug.Log("shooting hit point: " + hit.point + " name:" + hit.transform.name);
             }
             else
             {
-                Debug.Log("not hit every thing");
+                Debug.Log("shooting not hit every thing");
             }
             var direction = (hit.point - bullet.transform.position).normalized;//bulletVFX.transform.forward;
-            Debug.Log("Ray Origin: " + ray.origin);
 
-            Debug.Log("raycast hit: " + hit.point);
             var vfx = bullet.GetComponent<VisualEffect>();
             GameObject bulletParticle = bullet.transform.GetChild(0).gameObject;
             skillObj bulletScript = bulletParticle.AddComponent<skillObj>();
@@ -307,21 +298,27 @@ public class Character2ControlSystem : CharacterControlSystem
 
             bulletScript.onUpdate.AddListener((self) =>
             {
-                self.gameObject.transform.position += direction * 5f * Time.deltaTime;
+                if (self.canMove)
+                {
+                    self.gameObject.transform.position += direction * 5f * Time.deltaTime;
+                }
             });
             bulletScript.collisionEnter.AddListener((selfGO, collideGO) =>
             {
+                if (collideGO.TryGetComponent(out characterInfo info))
+                {
+                    var plinfo = PlayerController.Instance.playerInfo;
+
+                    info.takeDamage(plinfo.attack, DmgType.Physic);
+                }
                 vfx.SendEvent("onExplode");
-                Destroy(selfGO.transform.parent.gameObject, 3);
+                vfx.SetBool("isFollowTf", false);
+                selfGO.GetComponent<Collider>().enabled = false;
+                selfGO.GetComponent<skillObj>().canMove = false;
+                Destroy(selfGO.transform.parent.gameObject, 1);
             });
+            Destroy(bullet, 20);
 
-            //var e = vfx.outputEventReceived;
-            //e += (a) =>
-            //{
-
-            //    Debug.Log("out event: "+a);
-            //};
-            Debug.Log("Ban Ban Ban :)))");
         }
     }
     public void ReLoadBullet()
