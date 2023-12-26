@@ -312,10 +312,8 @@ public class Character2ControlSystem : CharacterControlSystem
                     info.takeDamage(plinfo.attack, DmgType.Physic);
                 }
                 vfx.SendEvent("onExplode");
-                vfx.SetBool("isFollowTf", false);
-                selfGO.GetComponent<Collider>().enabled = false;
-                selfGO.GetComponent<skillObj>().canMove = false;
-                Destroy(selfGO.transform.parent.gameObject, 1);
+                //vfx.SetBool("isFollowTf", false);
+                Destroy(selfGO);
             });
             Destroy(bullet, 20);
 
