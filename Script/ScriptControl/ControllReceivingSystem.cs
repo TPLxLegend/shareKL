@@ -1,21 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using static Cinemachine.AxisState;
 
 public class ControllReceivingSystem : MonoBehaviour
 {
     [SerializeField]
-    public CharacterControlSystem curCharacterControl; 
+    public CharacterControlSystem curCharacterControl;
     // Start is called before the first frame update
     public CharacterController characterController;
 
     public UnityEvent<CharacterControlSystem> onCurCharacterChange;
-    
+
 
     //Gia tri
     private float turnSmoothtime = 0.04f;
@@ -36,7 +31,7 @@ public class ControllReceivingSystem : MonoBehaviour
     private float dirForwardJump = 0f;
 
     private float DirmoveInputForWindForce;
-    private float forceFallFoward=0f;
+    private float forceFallFoward = 0f;
     private bool ForwardWindForce = false;
 
     //Cho CameraCheck
@@ -61,12 +56,12 @@ public class ControllReceivingSystem : MonoBehaviour
 
     private void OnEnable()
     {
-       
+
 
     }
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -80,28 +75,28 @@ public class ControllReceivingSystem : MonoBehaviour
         }
         jumpdirection.y = _directionY;
         characterController.Move(jumpdirection * Time.deltaTime);
-        if(forwardWhenJump && characterController.isGrounded==false) //co che move khi jump
+        if (forwardWhenJump && characterController.isGrounded == false) //co che move khi jump
         {
             Vector3 moveDir = Quaternion.Euler(0f, dirForwardJump, 0f) * Vector3.forward;
             characterController.Move(moveDir * forceForwardWhenJump * Time.deltaTime);
-            forceForwardWhenJump-=Time.deltaTime*0.5f;
+            forceForwardWhenJump -= Time.deltaTime * 0.5f;
         }
-        if(forwardWhenJump == false && !CheckGrounded())
+        if (forwardWhenJump == false && !CheckGrounded())
         {
             Vector3 moveDir = Quaternion.Euler(0f, DirmoveInputForWindForce, 0f) * Vector3.forward;
             characterController.Move(moveDir * forceFallFoward * Time.deltaTime);
         }
-        if(characterController.isGrounded)
+        if (characterController.isGrounded)
         {
             forwardWhenJump = false;
             forceForwardWhenJump = 0f;
             _directionY = -1f;
         }
-        if(isBehindTheWallRote)
+        if (isBehindTheWallRote)
         {
             float tmp = transform.rotation.eulerAngles.y;
             tmp = Mathf.Lerp(tmp, dirLookWhenBehindTheWall, 0.1f);
-            transform.rotation = Quaternion.Euler(0f,tmp, 0f);
+            transform.rotation = Quaternion.Euler(0f, tmp, 0f);
             Vector3 tmpV3 = transform.position;
             tmpV3 = Vector3.Lerp(tmpV3, dirRotateWhenBehindTheWall, 0.5f);
             tmpV3.y = transform.position.y;
@@ -117,11 +112,11 @@ public class ControllReceivingSystem : MonoBehaviour
     {
         Transform team;
         team = transform.GetChild(1).transform;
-        foreach(Transform obj in team.transform)
+        foreach (Transform obj in team.transform)
         {
             if (obj.gameObject.activeSelf == true)
             {
-                curCharacterControl=obj.gameObject.GetComponent<CharacterControlSystem>();
+                curCharacterControl = obj.gameObject.GetComponent<CharacterControlSystem>();
                 onCurCharacterChange.Invoke(curCharacterControl);
                 break;
             }
@@ -178,11 +173,11 @@ public class ControllReceivingSystem : MonoBehaviour
     {
         curCharacterControl.cancleDash(context);
     }
-    public  void ActionC(InputAction.CallbackContext context) 
+    public void ActionC(InputAction.CallbackContext context)
     {
         curCharacterControl.ActionC(context);
     }
-    public  void cancleC(InputAction.CallbackContext context) 
+    public void cancleC(InputAction.CallbackContext context)
     {
         curCharacterControl.cancleC(context);
     }
@@ -206,7 +201,7 @@ public class ControllReceivingSystem : MonoBehaviour
     public void RotatePlayer(float targetAngle) //goc xoay theo truc Y
     {
         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothtime);
-        transform.rotation = Quaternion.Euler(0f, angle, 0f);       
+        transform.rotation = Quaternion.Euler(0f, angle, 0f);
     }
     public void setRotatePlayer(float targetAngle)
     {
@@ -226,7 +221,7 @@ public class ControllReceivingSystem : MonoBehaviour
     public void Jump(float dir, float force)
     {
         _directionY = jumpSpeed;
-        if(dir == 0f) { return; }
+        if (dir == 0f) { return; }
         forwardWhenJump = true;
         forceForwardWhenJump = force;
         dirForwardJump = dir;
@@ -247,7 +242,7 @@ public class ControllReceivingSystem : MonoBehaviour
 
     public bool CheckGrounded()
     {
-        if(Physics.BoxCast(transform.position,boxCheck,-transform.up, transform.rotation,distanceCheck,layerCheck)) return true;
+        if (Physics.BoxCast(transform.position, boxCheck, -transform.up, transform.rotation, distanceCheck, layerCheck)) return true;
         return false;
     }
     private void OnDrawGizmos()

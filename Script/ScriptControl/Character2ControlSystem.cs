@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
@@ -58,7 +59,7 @@ public class Character2ControlSystem : CharacterControlSystem
             startMoveMent(targetAngle);
         }
         ChangeFasrRun();
-        if (shootState != ShootState.none && playerstate==playerState.normal)
+        if (shootState != ShootState.none && playerstate == playerState.normal)
             RunShoot(shootState);
         //luu gia tri cho action Jump
         dirFowardJump = targetAngle + Camera.main.transform.eulerAngles.y;
@@ -72,7 +73,7 @@ public class Character2ControlSystem : CharacterControlSystem
         {
             endShoot();
         }
-        if(playerstate==playerState.BehindTheWall)
+        if (playerstate == playerState.BehindTheWall)
         {
             cancleBehindTheWall();
         }
@@ -144,7 +145,7 @@ public class Character2ControlSystem : CharacterControlSystem
         {
             animator.Play("Dash");
             controllReceivingSystem.isDash = true;
-        }     
+        }
     }
     public override void cancleC(InputAction.CallbackContext ctx) { }
 
@@ -266,8 +267,8 @@ public class Character2ControlSystem : CharacterControlSystem
         controllReceivingSystem.RotatePlayer(Camera.main.transform.eulerAngles.y);
         Shoot();
     }
-    [SerializeField] GameObject bulletVFX;
     [SerializeField] Transform bulletTransform;
+    [SerializeField] float bulletSpeed = 10f;
     public void Shoot()
     {
         if (curBullet < 1)
@@ -284,49 +285,24 @@ public class Character2ControlSystem : CharacterControlSystem
         {
             lastTimeShoot = Time.time;
             curBullet -= 1;
-            GameObject bullet = Instantiate(bulletVFX, bulletTransform.position, bulletTransform.rotation);
-            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
 
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100f, ignoreShoot))
             {
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, hit.point, bulletSpeed, bulletTransform.position, bulletTransform.rotation);
                 Debug.Log("shooting hit point: " + hit.point + " name:" + hit.transform.name);
             }
             else
             {
-                Debug.Log("shooting not hit every thing");
+                Vector3 endPoint = ray.origin + ray.direction * 100f;
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, endPoint, bulletSpeed, bulletTransform.position, bulletTransform.rotation);
+                Debug.Log("shooting raycast not hit every thing so we use the endpoint");
             }
-            var direction = (hit.point - bullet.transform.position).normalized;//bulletVFX.transform.forward;
-
-            var vfx = bullet.GetComponent<VisualEffect>();
-            GameObject bulletParticle = bullet.transform.GetChild(0).gameObject;
-            skillObj bulletScript = bulletParticle.AddComponent<skillObj>();
-            bulletScript.onUpdate = new UnityEngine.Events.UnityEvent<skillObj>();
-            bulletScript.collisionEnter = new UnityEngine.Events.UnityEvent<GameObject, GameObject>();
-
-            bulletScript.onUpdate.AddListener((self) =>
-            {
-                if (self.canMove)
-                {
-                    self.gameObject.transform.position += direction * 5f * Time.deltaTime;
-                }
-            });
-            bulletScript.collisionEnter.AddListener((selfGO, collideGO) =>
-            {
-                if (collideGO.TryGetComponent(out characterInfo info))
-                {
-                    var plinfo = PlayerController.Instance.playerInfo;
-
-                    info.takeDamage(plinfo.attack, DmgType.Physic);
-                }
-                vfx.SendEvent("onExplode");
-                //vfx.SetBool("isFollowTf", false);
-                Destroy(selfGO);
-            });
-            Destroy(bullet, 20);
 
         }
     }
+
     public void ReLoadBullet()
     {
         animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 1f);
@@ -339,14 +315,14 @@ public class Character2ControlSystem : CharacterControlSystem
     }
     public void DashEnd()
     {
-        controllReceivingSystem.isDash=false;
+        controllReceivingSystem.isDash = false;
     }
     private void endShoot()
     {
         shootState = ShootState.none;
         CallToCameraMan(false);
         //animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
-        if(curBullet != maxBullet)
+        if (curBullet != maxBullet)
             ReLoadBullet();
         animator.SetBool("isAtk", false);
         timeCancleFisrtShoot = 0.05f;
