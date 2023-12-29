@@ -1,3 +1,4 @@
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
@@ -8,6 +9,7 @@ public class Character2ControlSystem : CharacterControlSystem
     private ControllReceivingSystem controllReceivingSystem;
     [SerializeField]
     private Animator animator;
+    public aimPoint aimPoint;
 
 
 
@@ -16,6 +18,7 @@ public class Character2ControlSystem : CharacterControlSystem
     public playerState playerstate;
     public ShootState shootState;
     public Vector2 dirShootRun;
+
 
     //Gia tri
     //private bool isRun = false;
@@ -37,9 +40,12 @@ public class Character2ControlSystem : CharacterControlSystem
     public LayerMask ignoreShoot;
     private float timeCancleFisrtShoot = 0.05f;
 
+    private bool shootWhenSitDown = false;
+
     void Start()
     {
         ResetTele();
+        aimPoint = GameObject.Find("AimCanvas/aimPoint").GetComponent<aimPoint>();
     }
     private void Awake()
     {
@@ -60,6 +66,10 @@ public class Character2ControlSystem : CharacterControlSystem
         ChangeFasrRun();
         if (shootState != ShootState.none && playerstate==playerState.normal)
             RunShoot(shootState);
+        if(shootWhenSitDown && playerstate == playerState.BehindTheWall)
+        {
+            SitDownShoot();
+        }
         //luu gia tri cho action Jump
         dirFowardJump = targetAngle + Camera.main.transform.eulerAngles.y;
     }
@@ -101,21 +111,29 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         base.UseAttack(ctx);
         if (!CanATK()) return;
-        switch (runState)
+        if(playerstate == playerState.normal)
         {
-            case RunState.fastRun:
-                {
-                    shootState = checkStateShootRun();
-                    CallToCameraMan(true);
-                    break;
-                }
-            default:
-                {
-                    shootState = ShootState.runShoot;
-                    CallToCameraMan(true);
-                    break;
-                }
+            switch (runState)
+            {
+                case RunState.fastRun:
+                    {
+                        shootState = checkStateShootRun();
+                        CallToCameraMan(true);
+                        break;
+                    }
+                default:
+                    {
+                        shootState = ShootState.runShoot;
+                        CallToCameraMan(true);
+                        break;
+                    }
+            }
         }
+        else
+        {
+            shootWhenSitDown = true;
+        }
+        
     }
     public override void cancleAttack(InputAction.CallbackContext ctx)
     {
@@ -160,6 +178,7 @@ public class Character2ControlSystem : CharacterControlSystem
         shootState = ShootState.none;
         dirShootRun = new Vector2(0f, 0f);
         curBullet = maxBullet;
+        shootWhenSitDown = false;
     }
 
     //////////// Ham cua chinh no/////
@@ -266,6 +285,15 @@ public class Character2ControlSystem : CharacterControlSystem
         controllReceivingSystem.RotatePlayer(Camera.main.transform.eulerAngles.y);
         Shoot();
     }
+    private void SitDownShoot()
+    {
+        animator.SetBool("isAtk", true);
+        Vector2 aimPos = aimPoint.GetLocalPos();
+        animator.SetFloat("mouseHori", aimPos.x);
+        animator.SetFloat("mouseVerti", aimPos.y);
+        Shoot();
+    }
+
     [SerializeField] GameObject bulletVFX;
     [SerializeField] Transform bulletTransform;
     public void Shoot()
@@ -284,6 +312,8 @@ public class Character2ControlSystem : CharacterControlSystem
         {
             lastTimeShoot = Time.time;
             curBullet -= 1;
+            aimPoint.shoot(curBullet);
+            // What is Cai dong nay?? :)))
             GameObject bullet = Instantiate(bulletVFX, bulletTransform.position, bulletTransform.rotation);
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
 
@@ -350,12 +380,12 @@ public class Character2ControlSystem : CharacterControlSystem
             ReLoadBullet();
         animator.SetBool("isAtk", false);
         timeCancleFisrtShoot = 0.05f;
+        shootWhenSitDown = false;
     }
 
     private void CallToCameraMan(bool isShoot)
     {
         controllReceivingSystem.ChangeRunShoot(isShoot);
-
     }
 
     public bool CameraManCheckIsShoot()

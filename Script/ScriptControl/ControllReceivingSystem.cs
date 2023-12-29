@@ -259,8 +259,10 @@ public class ControllReceivingSystem : MonoBehaviour
     {
         isShoot = tmp;
     }
+    public UnityEvent cancleBehindTheWall;
     public void cancleBehindTheWallChild()
     {
+        cancleBehindTheWall.Invoke();
         isBehindTheWall = false;
         isBehindTheWallRote = false;
     }

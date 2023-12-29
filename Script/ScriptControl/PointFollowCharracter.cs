@@ -34,7 +34,8 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
     //Rotate camera when behind the wall
     private bool isBehind = false;
     private float dirLookTarget;
-
+    //UI aim
+    public aimPoint aim;
 
     private float turnsmoothVelocity = 0.0f;
     private bool returnnomal = false;
@@ -50,7 +51,7 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
         Debug.Log("character:" + PlayerController.Instance.input);
         */
         trackPlayer(PlayerController.Instance.player.transform);
-
+        aim = GameObject.Find("AimCanvas/aimPoint").GetComponent<aimPoint>();
     }
 
     public void trackPlayer(Transform target)
@@ -60,6 +61,9 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
         //controllReceivingSystem = PlayerController.Instance.player.GetComponent<ControllReceivingSystem>();
         controllReceivingSystem.onBehindTheWallCalled.AddListener(
             LookAtBehindTheWall
+            );
+        controllReceivingSystem.cancleBehindTheWall.AddListener(
+            endBehindTheWall
             );
         PlayerController.Instance.input.Player.look.performed += ctx => { RotateCamera(ctx); };
         PlayerController.Instance.input.Player.look.canceled += ctx => { cancleRotateCamera(); };
@@ -113,7 +117,10 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
     private void MouseRotateCamera()
     {
         if (controllReceivingSystem.IsLockControl()) { return; }
-        if (controllReceivingSystem.isBehindTheWall) { return; }
+        if (controllReceivingSystem.isBehindTheWall) 
+        {
+            return; 
+        }
         Vector3 currotation = transform.rotation.eulerAngles;
         currotation.z = 0f;
         transform.rotation = Quaternion.Euler(currotation);
@@ -159,9 +166,13 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
     }
     private void RotateCamera(InputAction.CallbackContext ctx)
     {
-        if (controllReceivingSystem.IsLockControl()) { return; }
-        if (controllReceivingSystem.isBehindTheWall) { return; }
         Vector2 dir = ctx.ReadValue<Vector2>();
+        if (controllReceivingSystem.IsLockControl()) { return; }
+        if (controllReceivingSystem.isBehindTheWall) 
+        {
+            aim.SetPosAimPoint(dir.x, dir.y);
+            return; 
+        }
         Vector3 currotation = transform.rotation.eulerAngles;
         currotation.z = 0f;
         transform.rotation = Quaternion.Euler(currotation);
@@ -213,7 +224,10 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
         isBehind = true;
         dirLookTarget = dir;
     }
-
+    public void endBehindTheWall()
+    {
+        aim.ResetAimPos();
+    }
 
     private bool isBetween(float x, float target, float diference)
     {
