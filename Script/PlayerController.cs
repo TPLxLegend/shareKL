@@ -144,7 +144,7 @@ public class PlayerController : SingletonPersistent<PlayerController>
     }
     public void setPlayerControllable(bool active)
     {
-        controllReceivingSystem.enabled = active;
+        if (controllReceivingSystem) controllReceivingSystem.enabled = active;
         playerInfo.enabled = active;
         controller.enabled = active;
         if (active) input.Player.Enable(); else input.Player.Disable();

@@ -71,3 +71,5 @@ MonoBehaviour:
     type: 3}
   namePlayerCanvas: {fileID: 5357055897618993551, guid: 6037ac7f31824f367a7da659a38914e5,
     type: 3}
+  bulletVFX: {fileID: 5857748068714350175, guid: db3c2633a11b40147a525c61d10cff61,
+    type: 3}

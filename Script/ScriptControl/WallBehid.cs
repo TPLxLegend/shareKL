@@ -1,12 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Unity.Netcode;
 using UnityEngine;
-
+[RequireComponent(typeof(NetworkObject))]
 public class WallBehid : ItemAction
 {
     public ControllReceivingSystem player;
+    //public NetworkVariable<bool> netIsUsing=new NetworkVariable<bool>(false,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
     public bool isUsing = false;
+    [ServerRpc(RequireOwnership =false)]
+    public void setIsUseThroughtNetworkServerRpc(ulong clientID,bool isUseValue)
+    {
+        setIsUseBoardcastClientRpc(OwnerClientId,isUseValue);
+    }
+    [ClientRpc]
+    public void setIsUseBoardcastClientRpc(ulong clientID,bool value)
+    {
+        isUsing = value;
+    }
     private void Start()
     {
         baseDeception = gameObject.name;
@@ -43,9 +55,9 @@ public class WallBehid : ItemAction
         }
     }
     public override void UseItem()
-    {  
+    {
         base.UseItem();
-        if(!isUsing && player!= null)
+        if (!isUsing && player != null)
         {
             player.BehindTheWall(transform.position, transform.eulerAngles.y);
         }
@@ -53,11 +65,11 @@ public class WallBehid : ItemAction
         {
             FressFScrollView.instance.RemoveItem(this);
         }
-        isUsing = true;
+        setIsUseThroughtNetworkServerRpc(NetworkManager.Singleton.LocalClientId, true);
     }
     public void leaveWall()
     {
-        isUsing = false;
+        setIsUseThroughtNetworkServerRpc(NetworkManager.Singleton.LocalClientId, false);
         player = null;
     }
 }

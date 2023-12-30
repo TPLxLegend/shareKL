@@ -1,5 +1,4 @@
 using Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -101,7 +100,7 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
         {
             ChangeShoulderOffset(0f);
         }
-        if(isBehind)
+        if (isBehind)
         {
             float tmp = transform.rotation.eulerAngles.y;
             tmp = Mathf.Lerp(tmp, dirLookTarget, 0.1f);

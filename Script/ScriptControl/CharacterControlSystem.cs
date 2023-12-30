@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-abstract public class CharacterControlSystem : NetworkBehaviour// MonoBehaviour
+abstract public class CharacterControlSystem : MonoBehaviour// MonoBehaviour
 {
     public virtual void UseMovement(InputAction.CallbackContext ctx) { }
     public virtual void cancleMovement() { }

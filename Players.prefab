@@ -23,13 +23,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2979539663875337430}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.0001, y: 0.00138, z: 0.00561}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3981567488591506651}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3030182693006010067
 GameObject:
@@ -54,13 +54,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3030182693006010067}
-  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4854548757790610295}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3414444636531974092
 GameObject:
@@ -89,7 +89,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3414444636531974092}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -352, y: 4.81, z: 137.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -98,6 +97,7 @@ Transform:
   - {fileID: 8061921775879855567}
   - {fileID: 8124764408014332444}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &708862222502682328
 CharacterController:
@@ -150,11 +150,22 @@ MonoBehaviour:
   forwardWhenJump: 0
   forceForwardWhenJump: 0
   isShoot: 0
+  isBehindTheWall: 0
+  isBehindTheWallRote: 0
+  dirLookWhenBehindTheWall: 0
+  dirRotateWhenBehindTheWall: {x: 0, y: 0, z: 0}
+  isDash: 0
   distanceCheck: 0.2
   boxCheck: {x: 0.35, y: 0.002, z: 0.35}
   layerCheck:
     serializedVersion: 2
     m_Bits: 1
+  onBehindTheWallCalled:
+    m_PersistentCalls:
+      m_Calls: []
+  cancleBehindTheWall:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &697185501665228580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,10 +180,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 951099334
   AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
 --- !u!114 &904627856124160358
@@ -199,12 +206,8 @@ MonoBehaviour:
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
-  UseQuaternionSynchronization: 0
-  UseQuaternionCompression: 0
-  UseHalfFloatPrecision: 0
   InLocalSpace: 1
   Interpolate: 1
-  SlerpPosition: 0
 --- !u!1 &7554517779103579952
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,7 +231,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7554517779103579952}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -237,6 +239,7 @@ Transform:
   - {fileID: 9028085803242200014}
   - {fileID: 6056145036800707050}
   m_Father: {fileID: 4854548757790610295}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4053441366624209891
 PrefabInstance:
@@ -3143,6 +3146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controllReceivingSystem: {fileID: 0}
   animator: {fileID: 0}
+  aimPoint: {fileID: 0}
   runStyle: 1
   playerstate: 0
   shootState: 0
@@ -3158,10 +3162,9 @@ MonoBehaviour:
   shootOnSecond: 10
   ignoreShoot:
     serializedVersion: 2
-    m_Bits: 319
-  bulletVFX: {fileID: 5857748068714350175, guid: db3c2633a11b40147a525c61d10cff61,
-    type: 3}
+    m_Bits: 1
   bulletTransform: {fileID: 3534522875554580284}
+  bulletSpeed: 10
 --- !u!114 &8124868730893064512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3213,10 +3216,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 951099334
   AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
 --- !u!1001 &8845225017009699877
@@ -4135,7 +4134,7 @@ MonoBehaviour:
   dirFowardJump: 0
 --- !u!95 &5998514643628782334
 Animator:
-  serializedVersion: 7
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4149,7 +4148,6 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -4206,10 +4204,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 951099334
   AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
 --- !u!4 &9028085803242200014 stripped

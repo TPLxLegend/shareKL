@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 1788875239984080295}
   - component: {fileID: 8999479372703767342}
   - component: {fileID: 8465127689228717551}
-  m_Layer: 0
+  - component: {fileID: 5208113427180542915}
+  m_Layer: 7
   m_Name: WallShoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,6 +72,22 @@ MonoBehaviour:
   baseDeception: Nap sau tuong
   player: {fileID: 0}
   isUsing: 0
+--- !u!114 &5208113427180542915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3190812202328946543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1001 &8111083256055193574
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -153,6 +170,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: iceWall
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8bd44789a6d18674fbcb74a73f27d160,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

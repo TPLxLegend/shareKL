@@ -1,6 +1,7 @@
-using Unity.Burst.Intrinsics;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 using UnityEngine.VFX;
 
 public class Character2ControlSystem : CharacterControlSystem
@@ -38,7 +39,7 @@ public class Character2ControlSystem : CharacterControlSystem
     public int shootOnSecond = 10;
     private float lastTimeShoot = 0f;
     public LayerMask ignoreShoot;
-    private float timeCancleFisrtShoot = 0.05f;
+    private float timeCancleFisrtShoot = 0.1f;
 
     private bool shootWhenSitDown = false;
 
@@ -64,9 +65,9 @@ public class Character2ControlSystem : CharacterControlSystem
             startMoveMent(targetAngle);
         }
         ChangeFasrRun();
-        if (shootState != ShootState.none && playerstate==playerState.normal)
+        if (shootState != ShootState.none && playerstate == playerState.normal)
             RunShoot(shootState);
-        if(shootWhenSitDown && playerstate == playerState.BehindTheWall)
+        if (shootWhenSitDown && playerstate == playerState.BehindTheWall)
         {
             SitDownShoot();
         }
@@ -82,7 +83,7 @@ public class Character2ControlSystem : CharacterControlSystem
         {
             endShoot();
         }
-        if(playerstate==playerState.BehindTheWall)
+        if (playerstate == playerState.BehindTheWall)
         {
             cancleBehindTheWall();
         }
@@ -111,7 +112,7 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         base.UseAttack(ctx);
         if (!CanATK()) return;
-        if(playerstate == playerState.normal)
+        if (playerstate == playerState.normal)
         {
             switch (runState)
             {
@@ -133,7 +134,7 @@ public class Character2ControlSystem : CharacterControlSystem
         {
             shootWhenSitDown = true;
         }
-        
+
     }
     public override void cancleAttack(InputAction.CallbackContext ctx)
     {
@@ -162,7 +163,7 @@ public class Character2ControlSystem : CharacterControlSystem
         {
             animator.Play("Dash");
             controllReceivingSystem.isDash = true;
-        }     
+        }
     }
     public override void cancleC(InputAction.CallbackContext ctx) { }
 
@@ -285,6 +286,7 @@ public class Character2ControlSystem : CharacterControlSystem
         controllReceivingSystem.RotatePlayer(Camera.main.transform.eulerAngles.y);
         Shoot();
     }
+
     private void SitDownShoot()
     {
         animator.SetBool("isAtk", true);
@@ -294,10 +296,15 @@ public class Character2ControlSystem : CharacterControlSystem
         Shoot();
     }
 
-    [SerializeField] GameObject bulletVFX;
+ 
     [SerializeField] Transform bulletTransform;
+    float bulletSpeed = 100f;
     public void Shoot()
     {
+        if(playerstate == playerState.BehindTheWall)
+        {
+            cancleReload();
+        }
         if (curBullet < 1)
         {
             endShoot();
@@ -314,53 +321,42 @@ public class Character2ControlSystem : CharacterControlSystem
             curBullet -= 1;
             aimPoint.shoot(curBullet);
             // What is Cai dong nay?? :)))
-            GameObject bullet = Instantiate(bulletVFX, bulletTransform.position, bulletTransform.rotation);
-            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(aimPoint.GetLocalPos().x  + 960f, aimPoint.GetLocalPos().y + 540f, 0f));
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100f, ignoreShoot))
+            float tl = 0.02f;
+            if (Physics.Raycast(ray, out hit, 1000f, ignoreShoot))
             {
+                var length = ((hit.point - bulletTransform.position).magnitude);    //hit.distance;
+                Vector3 range = new Vector3(Random.Range(-tl*length, tl * length), Random.Range(-tl * length, tl * length), Random.Range(-tl * length, tl * length));
+                Debug.LogWarning("Ke qua Rangdom:  " + range );
+                range += hit.point;
+                Quaternion rot = Quaternion.LookRotation(range - bulletTransform.position);
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,bulletSpeed, bulletTransform.position, rot);
                 Debug.Log("shooting hit point: " + hit.point + " name:" + hit.transform.name);
             }
             else
             {
-                Debug.Log("shooting not hit every thing");
+                Vector3 endPoint = ray.origin + ray.direction * 1000f;
+                var length = ((endPoint - bulletTransform.position).magnitude);    //hit.distance;
+                Vector3 range = new Vector3(Random.Range(-tl * length, tl * length), Random.Range(-tl * length, tl * length), Random.Range(-tl * length, tl * length));
+                Debug.LogWarning("Ke qua Rangdom Maxxx:  " + range);
+                range += endPoint;
+                Quaternion rot = Quaternion.LookRotation(range - bulletTransform.position);
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,  bulletSpeed, bulletTransform.position, rot);
+                Debug.Log("shooting raycast not hit every thing so we use the endpoint");
             }
-            var direction = (hit.point - bullet.transform.position).normalized;//bulletVFX.transform.forward;
-
-            var vfx = bullet.GetComponent<VisualEffect>();
-            GameObject bulletParticle = bullet.transform.GetChild(0).gameObject;
-            skillObj bulletScript = bulletParticle.AddComponent<skillObj>();
-            bulletScript.onUpdate = new UnityEngine.Events.UnityEvent<skillObj>();
-            bulletScript.collisionEnter = new UnityEngine.Events.UnityEvent<GameObject, GameObject>();
-
-            bulletScript.onUpdate.AddListener((self) =>
-            {
-                if (self.canMove)
-                {
-                    self.gameObject.transform.position += direction * 5f * Time.deltaTime;
-                }
-            });
-            bulletScript.collisionEnter.AddListener((selfGO, collideGO) =>
-            {
-                if (collideGO.TryGetComponent(out characterInfo info))
-                {
-                    var plinfo = PlayerController.Instance.playerInfo;
-
-                    info.takeDamage(plinfo.attack, DmgType.Physic);
-                }
-                vfx.SendEvent("onExplode");
-                //vfx.SetBool("isFollowTf", false);
-                Destroy(selfGO);
-            });
-            Destroy(bullet, 20);
 
         }
     }
+
     public void ReLoadBullet()
     {
         animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 1f);
         animator.Play("LayerHand.Reload");
+    }
+    private void cancleReload()
+    {
+        animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
     }
     public void ReLoadBulletEnd()
     {
@@ -369,17 +365,17 @@ public class Character2ControlSystem : CharacterControlSystem
     }
     public void DashEnd()
     {
-        controllReceivingSystem.isDash=false;
+        controllReceivingSystem.isDash = false;
     }
     private void endShoot()
     {
         shootState = ShootState.none;
         CallToCameraMan(false);
         //animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
-        if(curBullet != maxBullet)
+        if (curBullet != maxBullet)
             ReLoadBullet();
         animator.SetBool("isAtk", false);
-        timeCancleFisrtShoot = 0.05f;
+        timeCancleFisrtShoot = 0.1f;
         shootWhenSitDown = false;
     }
 
