@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 using Unity.Netcode;
 using UnityEngine;
 [RequireComponent(typeof(NetworkObject))]
@@ -9,13 +6,13 @@ public class WallBehid : ItemAction
     public ControllReceivingSystem player;
     //public NetworkVariable<bool> netIsUsing=new NetworkVariable<bool>(false,NetworkVariableReadPermission.Everyone,NetworkVariableWritePermission.Owner);
     public bool isUsing = false;
-    [ServerRpc(RequireOwnership =false)]
-    public void setIsUseThroughtNetworkServerRpc(ulong clientID,bool isUseValue)
+    [ServerRpc(RequireOwnership = false)]
+    public void setIsUseThroughtNetworkServerRpc(ulong clientID, bool isUseValue)
     {
-        setIsUseBoardcastClientRpc(OwnerClientId,isUseValue);
+        setIsUseBoardcastClientRpc(OwnerClientId, isUseValue);
     }
     [ClientRpc]
-    public void setIsUseBoardcastClientRpc(ulong clientID,bool value)
+    public void setIsUseBoardcastClientRpc(ulong clientID, bool value)
     {
         isUsing = value;
     }
@@ -25,19 +22,19 @@ public class WallBehid : ItemAction
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag=="Player")
+        if (other.gameObject.tag == "Player")
         {
             player = other.gameObject.GetComponent<ControllReceivingSystem>();
-            if(player != null )
+            if (player != null)
             {
                 if (player.isDash)
                 {
                     UseItem();
                     player.isDash = false;
-                }    
+                }
             }
 
-            if (FressFScrollView.instance != null && !isUsing )
+            if (FressFScrollView.instance != null && !isUsing)
             {
                 FressFScrollView.instance.AddItem(this);
             }
