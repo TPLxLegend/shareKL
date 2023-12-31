@@ -8,8 +8,7 @@ public class Character2ControlSystem : CharacterControlSystem
 {
     [SerializeField]
     private ControllReceivingSystem controllReceivingSystem;
-    [SerializeField]
-    private Animator animator;
+    
     public aimPoint aimPoint;
 
 
@@ -45,14 +44,15 @@ public class Character2ControlSystem : CharacterControlSystem
 
     void Start()
     {
+        animator = transform.GetComponent<Animator>();
+
+        controllReceivingSystem = transform.parent.GetComponentInParent<ControllReceivingSystem>();
         ResetTele();
         aimPoint = GameObject.Find("AimCanvas/aimPoint").GetComponent<aimPoint>();
     }
     private void Awake()
     {
-        animator = transform.GetComponent<Animator>();
 
-        controllReceivingSystem = transform.parent.GetComponentInParent<ControllReceivingSystem>();
     }
 
     // Update is called once per frame
@@ -161,7 +161,8 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         if (CanActionC())
         {
-            animator.Play("Dash");
+            playAni = "Dash";
+            
             controllReceivingSystem.isDash = true;
         }
     }
@@ -245,11 +246,12 @@ public class Character2ControlSystem : CharacterControlSystem
     }
     private void Jump()
     {
-        animator.Play("Jump");
+        playAni=("Jump");
         if (runState == RunState.run || runState == RunState.fastRun)
         {
             controllReceivingSystem.Jump(dirFowardJump, moveSpeed + 1f);
             controllReceivingSystem.setRotatePlayer(dirFowardJump);
+            return;
         }
         controllReceivingSystem.Jump(0f, 5f);
     }
@@ -296,12 +298,12 @@ public class Character2ControlSystem : CharacterControlSystem
         Shoot();
     }
 
- 
+
     [SerializeField] Transform bulletTransform;
     float bulletSpeed = 100f;
     public void Shoot()
     {
-        if(playerstate == playerState.BehindTheWall)
+        if (playerstate == playerState.BehindTheWall)
         {
             cancleReload();
         }
@@ -321,17 +323,17 @@ public class Character2ControlSystem : CharacterControlSystem
             curBullet -= 1;
             aimPoint.shoot(curBullet);
             // What is Cai dong nay?? :)))
-            Ray ray = Camera.main.ScreenPointToRay(new Vector3(aimPoint.GetLocalPos().x  + 960f, aimPoint.GetLocalPos().y + 540f, 0f));
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(aimPoint.GetLocalPos().x + 960f, aimPoint.GetLocalPos().y + 540f, 0f));
             RaycastHit hit;
             float tl = 0.02f;
             if (Physics.Raycast(ray, out hit, 1000f, ignoreShoot))
             {
                 var length = ((hit.point - bulletTransform.position).magnitude);    //hit.distance;
-                Vector3 range = new Vector3(Random.Range(-tl*length, tl * length), Random.Range(-tl * length, tl * length), Random.Range(-tl * length, tl * length));
-                Debug.LogWarning("Ke qua Rangdom:  " + range );
+                Vector3 range = new Vector3(Random.Range(-tl * length, tl * length), Random.Range(-tl * length, tl * length), Random.Range(-tl * length, tl * length));
+                Debug.LogWarning("Ke qua Rangdom:  " + range);
                 range += hit.point;
                 Quaternion rot = Quaternion.LookRotation(range - bulletTransform.position);
-                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,bulletSpeed, bulletTransform.position, rot);
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, bulletSpeed, bulletTransform.position, rot);
                 Debug.Log("shooting hit point: " + hit.point + " name:" + hit.transform.name);
             }
             else
@@ -342,7 +344,7 @@ public class Character2ControlSystem : CharacterControlSystem
                 Debug.LogWarning("Ke qua Rangdom Maxxx:  " + range);
                 range += endPoint;
                 Quaternion rot = Quaternion.LookRotation(range - bulletTransform.position);
-                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,  bulletSpeed, bulletTransform.position, rot);
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, bulletSpeed, bulletTransform.position, rot);
                 Debug.Log("shooting raycast not hit every thing so we use the endpoint");
             }
 
@@ -439,6 +441,7 @@ public class Character2ControlSystem : CharacterControlSystem
             controllReceivingSystem.apllyRootMotion(animator.deltaPosition * 600f);
         }
     }
+
 
 }
 //PlayerState chia la 2 co che chinh: ban tu do va nap sau tuong

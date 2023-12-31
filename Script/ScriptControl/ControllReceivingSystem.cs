@@ -106,8 +106,9 @@ public class ControllReceivingSystem : MonoBehaviour
         }
     }
     //Cac Method support cho chinh no///////////////////////////////////////////////////////////////////////////
-    private void ReLoadCurCharacter()
+    public void ReLoadCurCharacter()
     {
+        if (!transform.GetChild(1)) return;
         Transform team;
         team = transform.GetChild(1).transform;
         foreach (Transform obj in team.transform)
@@ -275,4 +276,5 @@ public class ControllReceivingSystem : MonoBehaviour
         if (x.z > target.z + 0.1f || x.z < target.z - 0.1f) return false;
         return true;
     }
+
 }

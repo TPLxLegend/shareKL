@@ -461,7 +461,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3507c1473e39d3a4295ca02a43ac9404,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1042876196483904465, guid: 3507c1473e39d3a4295ca02a43ac9404,
         type: 3}
@@ -916,7 +916,7 @@ MonoBehaviour:
   dirFowardJump: 0
 --- !u!95 &4466893973047542308
 Animator:
-  serializedVersion: 7
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -930,7 +930,6 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -950,6 +949,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp:
     m_InternalValue: 100
+  onHPChange:
+    m_PersistentCalls:
+      m_Calls: []
   maxHP: 100
   mp: 5
   teamID: 0
@@ -987,9 +989,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 951099334
   AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1

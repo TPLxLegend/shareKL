@@ -2,8 +2,10 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-abstract public class CharacterControlSystem : MonoBehaviour// MonoBehaviour
+abstract public class CharacterControlSystem : NetworkBehaviour// MonoBehaviour
 {
+    [SerializeField]
+    protected Animator animator;
     public virtual void UseMovement(InputAction.CallbackContext ctx) { }
     public virtual void cancleMovement() { }
     public virtual void UseJump(InputAction.CallbackContext ctx) { }
@@ -18,4 +20,14 @@ abstract public class CharacterControlSystem : MonoBehaviour// MonoBehaviour
     public virtual void ResetTele() { }
     public virtual void BehindTheWall(Vector3 SitPosition, float dirLookAt) { }
     public virtual void cancleBehindTheWall() { }
+
+    public string playAni { set { aniplayServerRpc(value); } }
+
+    [ServerRpc(RequireOwnership =false)]
+    public virtual void aniplayServerRpc(string name)
+    {
+        playAnimationClientRpc(name);
+    }
+    [ClientRpc]
+    public virtual void playAnimationClientRpc(string aniNAme) { animator.Play(aniNAme); }
 }
