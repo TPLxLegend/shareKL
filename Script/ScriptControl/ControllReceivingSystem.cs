@@ -18,12 +18,10 @@ public class ControllReceivingSystem : MonoBehaviour
     private float turnSmoothVelocity = 0.0f;
     [SerializeField]
     private bool lockControl = false;
-    [SerializeField]
-    private float gravity = 9.81f;
+    private float gravity = 18f;
     [SerializeField]
     private float _directionY = 0.0f;
-    [SerializeField]
-    private float jumpSpeed = 5f;
+    private float jumpSpeed = 7f;
     [SerializeField]
     private bool forwardWhenJump = false;
     [SerializeField]
