@@ -207,7 +207,7 @@ public class Character2ControlSystem : CharacterControlSystem
 
     public void ChangeFasrRun()
     {
-        animator.SetFloat("runStyle", runStyle);
+        aniSetServerRpc("runStyle", runStyle);
         if (valueBetween(runStyle, targetRunStyle - 0.15f, targetRunStyle + 0.15f) && valueBetween(moveSpeed, targetRunspeed - 0.5f, targetRunspeed + 0.5f))
         {
             runStyle = targetRunStyle;
@@ -258,7 +258,7 @@ public class Character2ControlSystem : CharacterControlSystem
         aniSetServerRpc("isAtk", true);
         if (state == ShootState.runShoot)
             aniplayServerRpc("RunShoot");
-        animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 1f);
+        aniSetLayerWeightServerRpc(animator.GetLayerIndex("LayerHand"), 1f);
         if (state == ShootState.runShoot)
             aniplayServerRpc("LayerHand.RunShootUpper");
         else if (state == ShootState.fastRunShoots)
@@ -282,7 +282,7 @@ public class Character2ControlSystem : CharacterControlSystem
                 xAngle = -(180f + (((eulerAngX * (-1f)) + 180f) * (-1f)));
         }
         SetHoriVertiAnimatorRunShoot(dirShootRun.x, dirShootRun.y, false);
-        animator.SetFloat("runShootEular", xAngle);
+        aniSetServerRpc("runShootEular", xAngle);
         controllReceivingSystem.RotatePlayer(Camera.main.transform.eulerAngles.y);
         Shoot();
     }
@@ -291,14 +291,14 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         aniSetServerRpc("isAtk", true);
         Vector2 aimPos = aimPoint.GetLocalPos();
-        animator.SetFloat("mouseHori", aimPos.x);
-        animator.SetFloat("mouseVerti", aimPos.y);
+        aniSetServerRpc("mouseHori", aimPos.x);
+        aniSetServerRpc("mouseVerti", aimPos.y);
         Shoot();
     }
 
 
     [SerializeField] Transform bulletTransform;
-    float bulletSpeed = 100f;
+    [SerializeField] float bulletSpeed = 100f;
     public void Shoot()
     {
         if (playerstate == playerState.BehindTheWall)
@@ -351,16 +351,16 @@ public class Character2ControlSystem : CharacterControlSystem
 
     public void ReLoadBullet()
     {
-        animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 1f);
+        aniSetLayerWeightServerRpc(animator.GetLayerIndex("LayerHand"), 1f);
         aniplayServerRpc("LayerHand.Reload");
     }
     private void cancleReload()
     {
-        animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
+        aniSetLayerWeightServerRpc(animator.GetLayerIndex("LayerHand"), 0f);
     }
     public void ReLoadBulletEnd()
     {
-        animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
+        aniSetLayerWeightServerRpc(animator.GetLayerIndex("LayerHand"), 0f);
         curBullet = maxBullet;
     }
     public void DashEnd()
@@ -371,7 +371,7 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         shootState = ShootState.none;
         CallToCameraMan(false);
-        //animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
+        //aniSetLayerWeightServerRpc(animator.GetLayerIndex("LayerHand"), 0f);
         if (curBullet != maxBullet)
             ReLoadBullet();
         aniSetServerRpc("isAtk", false);
@@ -400,14 +400,14 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         if (tmpbool)
         {
-            animator.SetFloat("horizontal", x);
-            animator.SetFloat("vertical", y);
+            aniSetServerRpc("horizontal", x);
+            aniSetServerRpc("vertical", y);
             return;
         }
         float tmpx = animator.GetFloat("horizontal");
         float tmpy = animator.GetFloat("vertical");
-        animator.SetFloat("horizontal", Mathf.Lerp(tmpx, x, Time.deltaTime * 3f));
-        animator.SetFloat("vertical", Mathf.Lerp(tmpy, y, Time.deltaTime * 3f));
+        aniSetServerRpc("horizontal", Mathf.Lerp(tmpx, x, Time.deltaTime * 3f));
+        aniSetServerRpc("vertical", Mathf.Lerp(tmpy, y, Time.deltaTime * 3f));
     }
 
     public override void BehindTheWall(Vector3 SitPosition, float dirLookAt)
