@@ -21,13 +21,38 @@ abstract public class CharacterControlSystem : NetworkBehaviour// MonoBehaviour
     public virtual void BehindTheWall(Vector3 SitPosition, float dirLookAt) { }
     public virtual void cancleBehindTheWall() { }
 
-    public string playAni { set { aniplayServerRpc(value); } }
-
-    [ServerRpc(RequireOwnership =false)]
+    [ServerRpc(RequireOwnership = false)]
     public virtual void aniplayServerRpc(string name)
     {
         playAnimationClientRpc(name);
     }
     [ClientRpc]
     public virtual void playAnimationClientRpc(string aniNAme) { animator.Play(aniNAme); }
+
+    /// <summary>
+    /// set float parameter of animator thought network
+    /// </summary>
+    /// <param name="name"></param>
+    [ServerRpc(RequireOwnership = false)]
+    public virtual void aniSetServerRpc(string name, float fval = 0)
+    {
+        aniSetFloatClientRpc(name, fval);
+    }
+    [ServerRpc(RequireOwnership = false)]
+    public virtual void aniSetServerRpc(string name, bool fval)
+    {
+        aniSetFloatClientRpc(name, fval);
+    }
+    [ClientRpc]
+    public virtual void aniSetFloatClientRpc(string name, float fval = 0) => animator.SetFloat(name, fval);
+    [ClientRpc]
+    public virtual void aniSetFloatClientRpc(string name, bool fval) => animator.SetBool(name, fval);
+    [ServerRpc(RequireOwnership = false)]
+    public virtual void aniSetLayerWeightServerRpc(int id, float value)
+    {
+        aniSetLayerWeightClientRpc(id, value);
+    }
+
+    [ClientRpc]
+    public virtual void aniSetLayerWeightClientRpc(int id, float value) => animator.SetLayerWeight(id, value);
 }

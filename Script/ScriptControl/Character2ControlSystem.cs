@@ -1,14 +1,12 @@
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
-using UnityEngine.VFX;
 
 public class Character2ControlSystem : CharacterControlSystem
 {
     [SerializeField]
     private ControllReceivingSystem controllReceivingSystem;
-    
+
     public aimPoint aimPoint;
 
 
@@ -58,8 +56,8 @@ public class Character2ControlSystem : CharacterControlSystem
     // Update is called once per frame
     void Update()
     {
-        animator.SetBool("isGround", controllReceivingSystem.characterController.isGrounded);
-        animator.SetBool("fall", !controllReceivingSystem.characterController.isGrounded);
+        aniSetServerRpc("isGround", controllReceivingSystem.characterController.isGrounded);
+        aniSetServerRpc("fall", !controllReceivingSystem.characterController.isGrounded);
         if ((runState == RunState.run || runState == RunState.fastRun) && CanRun())
         {
             startMoveMent(targetAngle);
@@ -99,7 +97,7 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         base.cancleMovement();
         runState = RunState.none;
-        animator.SetBool("isRun", false);
+        aniSetServerRpc("isRun", false);
         dirShootRun = new Vector2(0f, 0f);
     }
     public override void UseJump(InputAction.CallbackContext ctx)
@@ -161,8 +159,8 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         if (CanActionC())
         {
-            playAni = "Dash";
-            
+            aniplayServerRpc("Dash");
+
             controllReceivingSystem.isDash = true;
         }
     }
@@ -195,7 +193,7 @@ public class Character2ControlSystem : CharacterControlSystem
     public void startMoveMent(float targetAngle)
     {
         if (controllReceivingSystem.IsLockControl()) { return; }
-        animator.SetBool("isRun", true);
+        aniSetServerRpc("isRun", true);
         if (shootState == ShootState.runShoot)
         {
             controllReceivingSystem.MovePlayer(targetAngle + Camera.main.transform.eulerAngles.y, runShootMoveSpeed);
@@ -246,7 +244,7 @@ public class Character2ControlSystem : CharacterControlSystem
     }
     private void Jump()
     {
-        playAni=("Jump");
+        aniplayServerRpc("Jump");
         if (runState == RunState.run || runState == RunState.fastRun)
         {
             controllReceivingSystem.Jump(dirFowardJump, moveSpeed + 1f);
@@ -257,14 +255,14 @@ public class Character2ControlSystem : CharacterControlSystem
     }
     private void RunShoot(ShootState state)
     {
-        animator.SetBool("isAtk", true);
+        aniSetServerRpc("isAtk", true);
         if (state == ShootState.runShoot)
-            animator.Play("RunShoot");
+            aniplayServerRpc("RunShoot");
         animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 1f);
         if (state == ShootState.runShoot)
-            animator.Play("LayerHand.RunShootUpper");
+            aniplayServerRpc("LayerHand.RunShootUpper");
         else if (state == ShootState.fastRunShoots)
-            animator.Play("LayerHand.FastRunShoot");
+            aniplayServerRpc("LayerHand.FastRunShoot");
         // set goc ban -->
         float eulerAngX = Camera.main.transform.localEulerAngles.x;
         float eulerAngy = Camera.main.transform.localEulerAngles.y;
@@ -291,7 +289,7 @@ public class Character2ControlSystem : CharacterControlSystem
 
     private void SitDownShoot()
     {
-        animator.SetBool("isAtk", true);
+        aniSetServerRpc("isAtk", true);
         Vector2 aimPos = aimPoint.GetLocalPos();
         animator.SetFloat("mouseHori", aimPos.x);
         animator.SetFloat("mouseVerti", aimPos.y);
@@ -354,7 +352,7 @@ public class Character2ControlSystem : CharacterControlSystem
     public void ReLoadBullet()
     {
         animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 1f);
-        animator.Play("LayerHand.Reload");
+        aniplayServerRpc("LayerHand.Reload");
     }
     private void cancleReload()
     {
@@ -376,7 +374,7 @@ public class Character2ControlSystem : CharacterControlSystem
         //animator.SetLayerWeight(animator.GetLayerIndex("LayerHand"), 0f);
         if (curBullet != maxBullet)
             ReLoadBullet();
-        animator.SetBool("isAtk", false);
+        aniSetServerRpc("isAtk", false);
         timeCancleFisrtShoot = 0.1f;
         shootWhenSitDown = false;
     }
@@ -416,7 +414,7 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         playerstate = playerState.BehindTheWall;
         //test
-        animator.Play("SitDown");
+        aniplayServerRpc("SitDown");
     }
     public override void cancleBehindTheWall()
     {

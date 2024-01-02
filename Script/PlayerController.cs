@@ -138,6 +138,7 @@ public class PlayerController : SingletonPersistent<PlayerController>
     }
     public void loadPlayerInfo(CharacterControlSystem value)
     {
+        if (value == null) return;
         playerInfo = value.gameObject.GetComponent<playerInfo>();
         hpBar.Instance.load();
         manaBar.Instance.load();
