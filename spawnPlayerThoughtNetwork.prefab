@@ -69,6 +69,10 @@ MonoBehaviour:
     type: 3}
   playerPrefab: {fileID: 3414444636531974092, guid: bcda317ca6a12a54aa6dcc6040d6c0c4,
     type: 3}
+  characterPrefab:
+  - {fileID: 8789455951128662864, guid: da2eab8bf7574b92aa525fbdb2d0dd48, type: 3}
+  - {fileID: 1784408104664969646, guid: d5d1bf86afc32dab6ae66edef8c570e4, type: 3}
+  team: {fileID: 6612382484671815586, guid: 10f6bb9c03984d84cb7ae7e214b5f613, type: 3}
   namePlayerCanvas: {fileID: 5357055897618993551, guid: 6037ac7f31824f367a7da659a38914e5,
     type: 3}
   bulletVFX: {fileID: 5857748068714350175, guid: db3c2633a11b40147a525c61d10cff61,

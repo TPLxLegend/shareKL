@@ -108,7 +108,7 @@ public class ControllReceivingSystem : MonoBehaviour
     //Cac Method support cho chinh no///////////////////////////////////////////////////////////////////////////
     public void ReLoadCurCharacter()
     {
-        if (!transform.GetChild(1)) return;
+        if (transform.childCount < 2) return;
         Transform team;
         team = transform.GetChild(1).transform;
         foreach (Transform obj in team.transform)
