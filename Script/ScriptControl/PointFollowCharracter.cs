@@ -21,12 +21,9 @@ public class PointFollowCharracter : Singleton<PointFollowCharracter>
 
     [SerializeField]
     private float speedScroll = 2f;
-    [SerializeField]
-    private float maxzoom = 50f;
-    [SerializeField]
-    private float minzoom = 30f;
-    [SerializeField]
-    private float nomalzoom = 40f;
+    private float maxzoom = 60f;
+    private float minzoom = 45f;
+    private float nomalzoom = 50f;
     [SerializeField]
     private float turnsmoothTime = 0.15f;
 

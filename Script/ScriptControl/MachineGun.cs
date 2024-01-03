@@ -5,6 +5,8 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI.Table;
+using Unity.UI;
+using UnityEngine.UI;
 
 public class MachineGun : MonoBehaviour
 {
@@ -21,14 +23,29 @@ public class MachineGun : MonoBehaviour
     // Start is called before the first frame update
     float tmp = 2f;
     bool tmpshoot = false;
+    float bulletSpeed = 100f;
+
+    public int maxNumButllet = 100;
+    public int curButllet = 0;
+
+    private bool reload = false;
+    private float timeReload = 4f;
+    private float curTimeReload = 0f;
+
+    public TextMeshProUGUI textMeshProUGUI;
+    public Slider slider;
     void Start()
     {
-        
+        curButllet = maxNumButllet;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (reload)
+        {
+            ReloadBuleet();
+        }
         if(AttackMode)
         {
             //body
@@ -43,27 +60,17 @@ public class MachineGun : MonoBehaviour
             Quaternion lookRotation = Quaternion.LookRotation(dirForward);
             head.transform.rotation = lookRotation;
 
-            float bulletSpeed = 100f;
-            if(Time.time - tmp > 0.1f)
+            if(curButllet > 0) 
             {
-                if(tmpshoot)
-                {
-                    spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, bulletSpeed, pointRight.position, lookRotation);              
-                }
-                else
-                {
-                    spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, bulletSpeed, pointLeft.position, lookRotation);
-                }
-                tmpshoot = !tmpshoot;
-                tmp = Time.time;
+                shoot(lookRotation);
             }
-            
+
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent(out enemyInfo enemy) && !TargetList.Contains(other.gameObject))
+        if(other.gameObject.tag == "Enemy" && !TargetList.Contains(other.gameObject))
         {
             TargetList.Add(other.gameObject);
             ChangeModeMachineGun();
@@ -100,5 +107,47 @@ public class MachineGun : MonoBehaviour
             }
         }
         return goNearest;
+    }
+
+    private void shoot(Quaternion dir)
+    {
+        if (Time.time - tmp > 0.1f)
+        {
+            if (tmpshoot)
+            {
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, bulletSpeed, pointRight.position, dir);
+            }
+            else
+            {
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, bulletSpeed, pointLeft.position, dir);
+            }
+            tmpshoot = !tmpshoot;
+            tmp = Time.time;
+            curButllet--;
+            if(curButllet <= 0)
+            {
+                reload = true;
+                showHideUI(true);
+            }
+        }
+    }
+    private void ReloadBuleet()
+    {
+        if (curTimeReload > timeReload)
+        {
+            curButllet = maxNumButllet;
+            curTimeReload = 0f;
+            reload = false;
+            showHideUI(false);
+            return;
+        }
+        curTimeReload += Time.deltaTime;
+        slider.value = curTimeReload;
+    }
+
+    private void showHideUI(bool tmp)
+    {
+        slider.gameObject.SetActive(tmp);
+        textMeshProUGUI.gameObject.SetActive(tmp);
     }
 }
