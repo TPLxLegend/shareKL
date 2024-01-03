@@ -74,6 +74,11 @@ public class MachineGun : MonoBehaviour
         {
             TargetList.Add(other.gameObject);
             ChangeModeMachineGun();
+            var info =other.gameObject.GetComponent<enemyInfo>();
+            info.onDie.AddListener((i) =>
+            {
+                TargetList.Remove(i.gameObject);
+            });
         }
     }
     private void OnTriggerExit(Collider other)

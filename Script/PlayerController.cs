@@ -41,6 +41,8 @@ public class PlayerController : SingletonPersistent<PlayerController>
         input.Player.Dash.canceled += cancleDash;
         input.Player.C.performed += ActionC;
         input.Player.C.canceled += cancleC;
+        input.Player.SkillE.performed += SkillE;
+        input.Player.SkillE.canceled += endSkillE;
         // playerInput = gameObject.GetComponent<PlayerInput>();
 
     }
@@ -73,6 +75,8 @@ public class PlayerController : SingletonPersistent<PlayerController>
         input.Player.Dash.canceled -= cancleDash;
         input.Player.C.performed -= ActionC;
         input.Player.C.canceled -= cancleC;
+        input.Player.SkillE.performed -= SkillE;
+        input.Player.SkillE.canceled -= endSkillE;
         input.Disable();
 
     }
@@ -120,6 +124,15 @@ public class PlayerController : SingletonPersistent<PlayerController>
     public void cancleC(InputAction.CallbackContext context)
     {
         controllReceivingSystem.cancleC(context);
+    }
+
+    public void SkillE(InputAction.CallbackContext context)
+    {
+        controllReceivingSystem.UseSkillE(context);
+    }
+    public void endSkillE(InputAction.CallbackContext context)
+    {
+        controllReceivingSystem.EndSkillE(context);
     }
 
     #endregion

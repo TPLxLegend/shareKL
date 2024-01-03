@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -39,6 +40,8 @@ public class Character2ControlSystem : CharacterControlSystem
     private float timeCancleFisrtShoot = 0.1f;
 
     private bool shootWhenSitDown = false;
+    public GameObject shadowMachineGun;
+    public Vector3 pointSpamwMachineGun = Vector3.zero;
 
     void Start()
     {
@@ -71,6 +74,8 @@ public class Character2ControlSystem : CharacterControlSystem
         }
         //luu gia tri cho action Jump
         dirFowardJump = targetAngle + Camera.main.transform.eulerAngles.y;
+
+
     }
     public override void UseMovement(InputAction.CallbackContext ctx)
     {
@@ -166,6 +171,51 @@ public class Character2ControlSystem : CharacterControlSystem
     }
     public override void cancleC(InputAction.CallbackContext ctx) { }
 
+    public override void skillE(InputAction.CallbackContext ctx)
+    {
+        base.skillE(ctx);
+        if(canUseSkillE())
+        {
+
+            StartCoroutine(checkPointSpawn());
+        }
+    }
+    public override void endShillE(InputAction.CallbackContext ctx)
+    {
+        base.endShillE(ctx);
+        isPlacingMachineGun = false;
+        if(pointSpamwMachineGun!=Vector3.zero)
+        {
+            itemPooling.Instance.spawnPrefabServerRpc(NetworkManager.LocalClientId, "machineGun", pointSpamwMachineGun, Quaternion.identity);
+        }
+    }
+    bool isPlacingMachineGun=false;
+    IEnumerator checkPointSpawn()
+    {
+        GameObject fakeMachineGun = Instantiate(shadowMachineGun, transform.position+transform.forward*2, transform.rotation);
+        isPlacingMachineGun = true;
+        while (isPlacingMachineGun)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(aimPoint.GetLocalPos().x + 960f, aimPoint.GetLocalPos().y + 540f, 0f));
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 1000f, ignoreShoot))
+            {
+                if((hit.point-transform.position).sqrMagnitude<4)
+                Debug.Log("placing shadow machine gun hit :   "+hit.collider.name);
+                fakeMachineGun.transform.position = hit.point;
+                pointSpamwMachineGun = hit.point;
+            }
+            else
+            {
+                pointSpamwMachineGun = Vector3.zero;
+            }
+            yield return new WaitForFixedUpdate();
+        }
+
+        Destroy(fakeMachineGun );
+
+    }
+
     public override void ResetTele()
     {
         base.ResetTele();
@@ -228,6 +278,14 @@ public class Character2ControlSystem : CharacterControlSystem
         return false;
     }
     private bool canJump()
+    {
+        if (!controllReceivingSystem.CheckGrounded()) { return false; }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9) { return false; }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ATK")) { return false; }
+        if (playerstate != playerState.normal) { return false; }
+        return true;
+    }
+    private bool canUseSkillE()
     {
         if (!controllReceivingSystem.CheckGrounded()) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9) { return false; }

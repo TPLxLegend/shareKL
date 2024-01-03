@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class FressFScrollView : MonoBehaviour
 {
     public static FressFScrollView instance;
@@ -152,10 +150,10 @@ public class FressFScrollView : MonoBehaviour
         DeleView();
         foreach(ItemAction item in listItem)
         {
-            GameObject go = Instantiate(prefabHolder) as GameObject;
+            GameObject go = Instantiate(prefabHolder,transform);
             var holderItemScript = go.GetComponent<holderItem>();
-            holderItemScript.SetDataHolderItem(item,item.baseIcon,item.baseDeception);
-            go.transform.SetParent(transform);
+            holderItemScript.SetDataHolderItem(item);
+           // go.GetComponent<NetworkObject>().TrySetParent(transform,false);
         }
         ChangedList();
     }

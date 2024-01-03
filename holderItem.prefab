@@ -31,6 +31,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3160776922475043488}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -106,6 +107,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3160776922475043488}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -224,7 +226,7 @@ GameObject:
   - component: {fileID: 1924779987306995351}
   - component: {fileID: 2891864279404549085}
   - component: {fileID: 7916366912929544094}
-  - component: {fileID: -6851592280412720907}
+  - component: {fileID: 6370660473533659339}
   m_Layer: 5
   m_Name: holderItem
   m_TagString: Untagged
@@ -247,6 +249,7 @@ RectTransform:
   - {fileID: 1479561171958562796}
   - {fileID: 4603884227700577028}
   m_Father: {fileID: 0}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -352,7 +355,7 @@ MonoBehaviour:
   linkItem: {fileID: 0}
   iconShow: {fileID: 257856699636505789}
   showDeception: {fileID: 6641417826858204572}
---- !u!114 &-6851592280412720907
+--- !u!114 &6370660473533659339
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -366,9 +369,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 951099334
   AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1

@@ -21,6 +21,10 @@ abstract public class CharacterControlSystem : NetworkBehaviour// MonoBehaviour
     public virtual void BehindTheWall(Vector3 SitPosition, float dirLookAt) { }
     public virtual void cancleBehindTheWall() { }
 
+    public virtual void skillE(InputAction.CallbackContext ctx) { }
+    public virtual void endShillE(InputAction.CallbackContext ctx) { }
+
+
     [ServerRpc(RequireOwnership = false)]
     public virtual void aniplayServerRpc(string name)
     {

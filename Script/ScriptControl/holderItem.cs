@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class holderItem : ItemAction
+public class holderItem :MonoBehaviour,IItemAction //ItemAction
 {
     //date item
     public ItemAction linkItem;
@@ -24,20 +24,19 @@ public class holderItem : ItemAction
     }
     public void LoadDataHolderItem()
     {
-        if(baseIcon != null)
-            iconShow.sprite = baseIcon;
-        showDeception.SetText(baseDeception);
+        if(linkItem.baseIcon != null)
+            iconShow.sprite = linkItem.baseIcon;
+        showDeception.SetText(linkItem.baseDeception);
     }
-    public void SetDataHolderItem(ItemAction linkitem, Sprite icon, string Deception)
+    public void SetDataHolderItem(ItemAction linkitem)
     {
         this.linkItem = linkitem;
-        this.baseIcon = icon;
-        this.baseDeception = Deception;
+        //this.baseIcon = icon;
+        //this.baseDeception = Deception;
         LoadDataHolderItem();
     }
-    public override void UseItem()
+    public void UseItem()
     {
-        base.UseItem();
         linkItem.UseItem();
     }
 }

@@ -17,13 +17,8 @@ public class ControllReceivingSystem : MonoBehaviour
     [SerializeField]
     private float turnSmoothVelocity = 0.0f;
     [SerializeField]
-<<<<<<< HEAD
     private bool lockControl = false;
     private float gravity = 30f;
-=======
-    bool lockControl = false;
-    private float gravity = 18f;
->>>>>>> 1532a81d856d207add267c25e00d8d077f23f5eb
     [SerializeField]
     private float _directionY = 0.0f;
     private float jumpSpeed = 10f;
@@ -185,6 +180,16 @@ public class ControllReceivingSystem : MonoBehaviour
     {
         curCharacterControl.cancleC(context);
     }
+
+    public void UseSkillE(InputAction.CallbackContext context)
+    {
+        curCharacterControl.skillE(context);
+    }
+    public void EndSkillE(InputAction.CallbackContext context)
+    {
+        curCharacterControl.endShillE(context);
+    }
+
     public UnityEvent<float> onBehindTheWallCalled;
     public void BehindTheWall(Vector3 SitPosition, float dirLookAt)
     {

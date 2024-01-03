@@ -89,6 +89,15 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillE"",
+                    ""type"": ""Button"",
+                    ""id"": ""1fc44309-6da7-450e-88cf-d534bd1f8e97"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -232,6 +241,17 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""FressF"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f060497b-911c-4b2e-846e-75be528439d5"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillE"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -405,6 +425,7 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_C = m_Player.FindAction("C", throwIfNotFound: true);
         m_Player_FressF = m_Player.FindAction("FressF", throwIfNotFound: true);
+        m_Player_SkillE = m_Player.FindAction("SkillE", throwIfNotFound: true);
         // card
         m_card = asset.FindActionMap("card", throwIfNotFound: true);
         m_card_card1 = m_card.FindAction("card1", throwIfNotFound: true);
@@ -484,6 +505,7 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_C;
     private readonly InputAction m_Player_FressF;
+    private readonly InputAction m_Player_SkillE;
     public struct PlayerActions
     {
         private @InputManagement m_Wrapper;
@@ -495,6 +517,7 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @C => m_Wrapper.m_Player_C;
         public InputAction @FressF => m_Wrapper.m_Player_FressF;
+        public InputAction @SkillE => m_Wrapper.m_Player_SkillE;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -525,6 +548,9 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
             @FressF.started += instance.OnFressF;
             @FressF.performed += instance.OnFressF;
             @FressF.canceled += instance.OnFressF;
+            @SkillE.started += instance.OnSkillE;
+            @SkillE.performed += instance.OnSkillE;
+            @SkillE.canceled += instance.OnSkillE;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -550,6 +576,9 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
             @FressF.started -= instance.OnFressF;
             @FressF.performed -= instance.OnFressF;
             @FressF.canceled -= instance.OnFressF;
+            @SkillE.started -= instance.OnSkillE;
+            @SkillE.performed -= instance.OnSkillE;
+            @SkillE.canceled -= instance.OnSkillE;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -708,6 +737,7 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnC(InputAction.CallbackContext context);
         void OnFressF(InputAction.CallbackContext context);
+        void OnSkillE(InputAction.CallbackContext context);
     }
     public interface ICardActions
     {

@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class ItemAction : NetworkBehaviour
+public class ItemAction : NetworkBehaviour,IItemAction
 {
     public Sprite baseIcon;
     public string baseDeception = "";
@@ -11,3 +11,9 @@ public class ItemAction : NetworkBehaviour
         if (!IsHost) Destroy(gameObject);
     }
 }
+public interface IItemAction
+{
+    public virtual void UseItem() { }
+}
+
+

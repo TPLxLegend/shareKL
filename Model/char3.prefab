@@ -23,13 +23,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1144890026039864534}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.0001, y: 0.00138, z: 0.00561}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1295728724972023003}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2232294006841478115
 PrefabInstance:
@@ -2947,7 +2947,10 @@ MonoBehaviour:
   ignoreShoot:
     serializedVersion: 2
     m_Bits: 1
+  shadowMachineGun: {fileID: 1569766820532909738, guid: a85e0c073fe3ebf4bb4bd55b22378f85,
+    type: 3}
   bulletTransform: {fileID: 1708871090973689660}
+  bulletSpeed: 100
 --- !u!114 &6231664601168664896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2999,9 +3002,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 951099334
   AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
