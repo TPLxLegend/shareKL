@@ -174,9 +174,8 @@ public class Character2ControlSystem : CharacterControlSystem
     public override void skillE(InputAction.CallbackContext ctx)
     {
         base.skillE(ctx);
-        if(canUseSkillE())
+        if (canUseSkillE())
         {
-
             StartCoroutine(checkPointSpawn());
         }
     }
@@ -184,12 +183,11 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         base.endShillE(ctx);
         isPlacingMachineGun = false;
-        if(pointSpamwMachineGun!=Vector3.zero)
+        if (pointSpamwMachineGun != Vector3.zero)
         {
-            itemPooling.Instance.spawnPrefabServerRpc(NetworkManager.LocalClientId, "machineGun", pointSpamwMachineGun, Quaternion.identity);
+            itemPooling.Instance.spawnPrefabServerRpc(NetworkManager.LocalClientId, "MachineGun", pointSpamwMachineGun, Quaternion.identity);
         }
     }
-
     public override void SkillUltimate(InputAction.CallbackContext ctx)
     {
         base.SkillUltimate(ctx);
@@ -209,18 +207,19 @@ public class Character2ControlSystem : CharacterControlSystem
     }
 
     bool isPlacingMachineGun=false;
+
     IEnumerator checkPointSpawn()
     {
-        GameObject fakeMachineGun = Instantiate(shadowMachineGun, transform.position+transform.forward*2, transform.rotation);
+        GameObject fakeMachineGun = Instantiate(shadowMachineGun, transform.position + transform.forward * 2, transform.rotation);
         isPlacingMachineGun = true;
         while (isPlacingMachineGun)
         {
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(aimPoint.GetLocalPos().x + 960f, aimPoint.GetLocalPos().y + 540f, 0f));
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 1000f, ignoreShoot))
+            if (Physics.Raycast(ray, out hit, 1000f, ignoreShoot, queryTriggerInteraction: QueryTriggerInteraction.Ignore))
             {
-                if((hit.point-transform.position).sqrMagnitude<4)
-                Debug.Log("placing shadow machine gun hit :   "+hit.collider.name);
+                if ((hit.point - transform.position).sqrMagnitude < 4)
+                    Debug.Log("placing shadow machine gun hit :   " + hit.collider.name);
                 fakeMachineGun.transform.position = hit.point;
                 pointSpamwMachineGun = hit.point;
             }
@@ -231,7 +230,7 @@ public class Character2ControlSystem : CharacterControlSystem
             yield return new WaitForFixedUpdate();
         }
 
-        Destroy(fakeMachineGun );
+        Destroy(fakeMachineGun);
 
     }
 
@@ -413,7 +412,7 @@ public class Character2ControlSystem : CharacterControlSystem
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(aimPoint.GetLocalPos().x + 960f, aimPoint.GetLocalPos().y + 540f, 0f));
             RaycastHit hit;
             float tl = 0.02f;
-            if (Physics.Raycast(ray, out hit, 1000f, ignoreShoot))
+            if (Physics.Raycast(ray, out hit, 1000f, ignoreShoot, queryTriggerInteraction: QueryTriggerInteraction.Ignore))
             {
                 var length = ((hit.point - bulletTransform.position).magnitude);    //hit.distance;
                 Vector3 range = new Vector3(Random.Range(-tl * length, tl * length), Random.Range(-tl * length, tl * length), Random.Range(-tl * length, tl * length));

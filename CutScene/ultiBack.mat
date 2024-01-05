@@ -37,6 +37,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -56,6 +60,7 @@ Material:
     - _size: 10
     - _speed: 0
     m_Colors:
-    - _Color: {r: 0.8679245, g: 0.81265575, b: 0.495372, a: 0}
-    - _frontLineColor: {r: 8, g: 6.5340314, b: 0, a: 1}
+    - _Color: {r: 0.7688679, g: 0.9240809, b: 1, a: 0}
+    - _frontLineColor: {r: 0.18346453, g: 1.1786205, b: 1.1420339, a: 1}
+    - _tilling: {r: 1, g: 50, b: 0, a: 0}
   m_BuildTextureStacks: []

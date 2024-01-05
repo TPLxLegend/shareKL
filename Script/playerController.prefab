@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8245403705984246498}
   - component: {fileID: 1345409866233848427}
   - component: {fileID: 4370975146401939897}
+  - component: {fileID: 2600416080227202794}
   m_Layer: 0
   m_Name: playerController
   m_TagString: Untagged
@@ -66,8 +67,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d73033aafd34afe4397c7baaa7cdeb02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dmgShowObj: {fileID: 0}
+  dmgShowObj: {fileID: 8705181660446900524, guid: 552cf3fe091c9a841bf0b3e5412d986a,
+    type: 3}
   cardPoint: 0
   maxCardPoint: 100
-  _namePlayer: {fileID: 0}
-  job: 0
+  namePlayer: 
+  skillObject: []
+--- !u!114 &2600416080227202794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3491930419238364231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
