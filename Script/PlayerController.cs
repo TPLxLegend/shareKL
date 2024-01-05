@@ -16,9 +16,7 @@ public class PlayerController : SingletonPersistent<PlayerController>
     public ControllReceivingSystem controllReceivingSystem;
 
 
-    private Vector3 playerVelocity;
     public bool groundedPlayer;
-    private float playerSpeed = 2.0f;
     #region mono
 
     public override void Awake()
@@ -28,57 +26,49 @@ public class PlayerController : SingletonPersistent<PlayerController>
         input.Enable();
         input.Player.Enable();
     }
+    public void toogleEvent(bool state)
+    {
+        if (state)
+        {
+            input.Player.Move.performed += MoveControl;
+            input.Player.Move.canceled += Move_canceled;
+            input.Player.Atk.performed += AtkControl;
+            input.Player.Atk.canceled += AtkCancle;
+            input.Player.Jump.performed += JumpControl;
+            input.Player.Jump.canceled += JumpCancle;
+            input.Player.Dash.performed += Dash;
+            input.Player.Dash.canceled += cancleDash;
+            input.Player.C.performed += ActionC;
+            input.Player.C.canceled += cancleC;
+            input.Player.SkillE.performed += SkillE;
+            input.Player.SkillE.canceled += endSkillE;
+        }
+        else
+        {
+            input.Player.Move.performed -= MoveControl;
+            input.Player.Move.canceled -= Move_canceled;
+            input.Player.Atk.performed -= AtkControl;
+            input.Player.Atk.canceled -= AtkCancle;
+            input.Player.Jump.performed -= JumpControl;
+            input.Player.Jump.canceled -= JumpCancle;
+            input.Player.Dash.performed -= Dash;
+            input.Player.Dash.canceled -= cancleDash;
+            input.Player.C.performed -= ActionC;
+            input.Player.C.canceled -= cancleC;
+            input.Player.SkillE.performed -= SkillE;
+            input.Player.SkillE.canceled -= endSkillE;
+        }
+    }
     void Start()
     {
 
-        input.Player.Move.performed += MoveControl;
-        input.Player.Move.canceled += Move_canceled;
-        input.Player.Atk.performed += AtkControl;
-        input.Player.Atk.canceled += AtkCancle;
-        input.Player.Jump.performed += JumpControl;
-        input.Player.Jump.canceled += JumpCancle;
-        input.Player.Dash.performed += Dash;
-        input.Player.Dash.canceled += cancleDash;
-        input.Player.C.performed += ActionC;
-        input.Player.C.canceled += cancleC;
-        input.Player.SkillE.performed += SkillE;
-        input.Player.SkillE.canceled += endSkillE;
-        // playerInput = gameObject.GetComponent<PlayerInput>();
-
     }
 
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        //groundedPlayer = controller.isGrounded;
-        //if (groundedPlayer && playerVelocity.y < 0)
-        //{
-        //    playerVelocity.y = 0f;
-        //}
-        ////////////
-
-        /////
-        //controller.Move(playerVelocity * Time.deltaTime * playerSpeed);
-    }
     protected void OnDestroy()
     {
         //base.OnDestroy();
-        input.Player.Move.performed -= MoveControl;
-        input.Player.Move.canceled -= Move_canceled;
-        input.Player.Atk.performed -= AtkControl;
-        input.Player.Atk.canceled -= AtkCancle;
-        input.Player.Jump.performed -= JumpControl;
-        input.Player.Jump.canceled -= JumpCancle;
-        input.Player.Dash.performed -= Dash;
-        input.Player.Dash.canceled -= cancleDash;
-        input.Player.C.performed -= ActionC;
-        input.Player.C.canceled -= cancleC;
-        input.Player.SkillE.performed -= SkillE;
-        input.Player.SkillE.canceled -= endSkillE;
+        toogleEvent(false);
         input.Disable();
-
     }
     #endregion
     #region controll
@@ -143,7 +133,7 @@ public class PlayerController : SingletonPersistent<PlayerController>
         {
             Debug.Log("call Rpc to instatiate player");
             spawnPlayerSystem.Instance.spawnPlayerServerRpc(transform.position, transform.rotation, NetworkManager.Singleton.LocalClientId);
-
+            toogleEvent(true);
         }
 
 
@@ -155,12 +145,5 @@ public class PlayerController : SingletonPersistent<PlayerController>
         playerInfo = value.gameObject.GetComponent<playerInfo>();
         hpBar.Instance.load();
         manaBar.Instance.load();
-    }
-    public void setPlayerControllable(bool active)
-    {
-        if (controllReceivingSystem) controllReceivingSystem.enabled = active;
-        playerInfo.enabled = active;
-        controller.enabled = active;
-        if (active) input.Player.Enable(); else input.Player.Disable();
     }
 }

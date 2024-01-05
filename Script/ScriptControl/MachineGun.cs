@@ -1,11 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI.Table;
-using Unity.UI;
 using UnityEngine.UI;
 
 public class MachineGun : MonoBehaviour
@@ -46,7 +42,7 @@ public class MachineGun : MonoBehaviour
         {
             ReloadBuleet();
         }
-        if(AttackMode)
+        if (AttackMode)
         {
             //body
             Vector3 betweenEnemeBody = GetTargetNearest().transform.position - body.transform.position;
@@ -56,11 +52,11 @@ public class MachineGun : MonoBehaviour
             //head
             Vector3 dir = GetTargetNearest().transform.position - head.position;
             Vector3 dirForward = head.transform.forward;
-            dirForward = Vector3.SmoothDamp(dirForward, dir, ref turnSmoothVelocityV3, turnSmoothtime*2f);
+            dirForward = Vector3.SmoothDamp(dirForward, dir, ref turnSmoothVelocityV3, turnSmoothtime * 2f);
             Quaternion lookRotation = Quaternion.LookRotation(dirForward);
             head.transform.rotation = lookRotation;
 
-            if(curButllet > 0) 
+            if (curButllet > 0)
             {
                 shoot(lookRotation);
             }
@@ -70,11 +66,11 @@ public class MachineGun : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Enemy" && !TargetList.Contains(other.gameObject))
+        if (other.gameObject.tag == "Enemy" && !TargetList.Contains(other.gameObject))
         {
             TargetList.Add(other.gameObject);
             ChangeModeMachineGun();
-            var info =other.gameObject.GetComponent<enemyInfo>();
+            var info = other.gameObject.GetComponent<enemyInfo>();
             info.onDie.AddListener((i) =>
             {
                 TargetList.Remove(i.gameObject);
@@ -92,20 +88,20 @@ public class MachineGun : MonoBehaviour
 
     private void ChangeModeMachineGun()
     {
-        if(TargetList.Count>0f)
+        if (TargetList.Count > 0f)
             AttackMode = true;
         else AttackMode = false;
     }
     private GameObject GetTargetNearest()
     {
-        if(!(TargetList.Count>0)) return null;
+        if (!(TargetList.Count > 0)) return null;
         float distance = float.PositiveInfinity;
         GameObject goNearest = null;
-        foreach(GameObject target in TargetList)
+        foreach (GameObject target in TargetList)
         {
             Vector3 dir = target.transform.position - transform.position;
             float distanceBetween = Vector3.SqrMagnitude(dir);
-            if(distanceBetween < distance)
+            if (distanceBetween < distance)
             {
                 distance = distanceBetween;
                 goNearest = target;
@@ -129,7 +125,7 @@ public class MachineGun : MonoBehaviour
             tmpshoot = !tmpshoot;
             tmp = Time.time;
             curButllet--;
-            if(curButllet <= 0)
+            if (curButllet <= 0)
             {
                 reload = true;
                 showHideUI(true);
