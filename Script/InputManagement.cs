@@ -98,6 +98,15 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillUltimate"",
+                    ""type"": ""Button"",
+                    ""id"": ""3e6df282-5aad-4729-b186-3506f67924d2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -252,6 +261,17 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SkillE"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04df2853-76e5-4dea-adcc-f8f776e3da6c"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillUltimate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -426,6 +446,7 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
         m_Player_C = m_Player.FindAction("C", throwIfNotFound: true);
         m_Player_FressF = m_Player.FindAction("FressF", throwIfNotFound: true);
         m_Player_SkillE = m_Player.FindAction("SkillE", throwIfNotFound: true);
+        m_Player_SkillUltimate = m_Player.FindAction("SkillUltimate", throwIfNotFound: true);
         // card
         m_card = asset.FindActionMap("card", throwIfNotFound: true);
         m_card_card1 = m_card.FindAction("card1", throwIfNotFound: true);
@@ -506,6 +527,7 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_C;
     private readonly InputAction m_Player_FressF;
     private readonly InputAction m_Player_SkillE;
+    private readonly InputAction m_Player_SkillUltimate;
     public struct PlayerActions
     {
         private @InputManagement m_Wrapper;
@@ -518,6 +540,7 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
         public InputAction @C => m_Wrapper.m_Player_C;
         public InputAction @FressF => m_Wrapper.m_Player_FressF;
         public InputAction @SkillE => m_Wrapper.m_Player_SkillE;
+        public InputAction @SkillUltimate => m_Wrapper.m_Player_SkillUltimate;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -551,6 +574,9 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
             @SkillE.started += instance.OnSkillE;
             @SkillE.performed += instance.OnSkillE;
             @SkillE.canceled += instance.OnSkillE;
+            @SkillUltimate.started += instance.OnSkillUltimate;
+            @SkillUltimate.performed += instance.OnSkillUltimate;
+            @SkillUltimate.canceled += instance.OnSkillUltimate;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -579,6 +605,9 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
             @SkillE.started -= instance.OnSkillE;
             @SkillE.performed -= instance.OnSkillE;
             @SkillE.canceled -= instance.OnSkillE;
+            @SkillUltimate.started -= instance.OnSkillUltimate;
+            @SkillUltimate.performed -= instance.OnSkillUltimate;
+            @SkillUltimate.canceled -= instance.OnSkillUltimate;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -738,6 +767,7 @@ public partial class @InputManagement: IInputActionCollection2, IDisposable
         void OnC(InputAction.CallbackContext context);
         void OnFressF(InputAction.CallbackContext context);
         void OnSkillE(InputAction.CallbackContext context);
+        void OnSkillUltimate(InputAction.CallbackContext context);
     }
     public interface ICardActions
     {

@@ -189,6 +189,14 @@ public class ControllReceivingSystem : MonoBehaviour
     {
         curCharacterControl.endShillE(context);
     }
+    public void Ultimate(InputAction.CallbackContext context)
+    {
+        curCharacterControl.SkillUltimate(context);
+    }
+    public void cancleUltimate(InputAction.CallbackContext context)
+    {
+        curCharacterControl.cancleUltimate(context);
+    }
 
     public UnityEvent<float> onBehindTheWallCalled;
     public void BehindTheWall(Vector3 SitPosition, float dirLookAt)

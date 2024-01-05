@@ -43,6 +43,8 @@ public class PlayerController : SingletonPersistent<PlayerController>
         input.Player.C.canceled += cancleC;
         input.Player.SkillE.performed += SkillE;
         input.Player.SkillE.canceled += endSkillE;
+        input.Player.SkillUltimate.performed += UseUltimate;
+        input.Player.SkillUltimate.canceled += cancleUltimate;
         // playerInput = gameObject.GetComponent<PlayerInput>();
 
     }
@@ -77,6 +79,8 @@ public class PlayerController : SingletonPersistent<PlayerController>
         input.Player.C.canceled -= cancleC;
         input.Player.SkillE.performed -= SkillE;
         input.Player.SkillE.canceled -= endSkillE;
+        input.Player.SkillUltimate.performed -= UseUltimate;
+        input.Player.SkillUltimate.canceled -= cancleUltimate;
         input.Disable();
 
     }
@@ -133,6 +137,14 @@ public class PlayerController : SingletonPersistent<PlayerController>
     public void endSkillE(InputAction.CallbackContext context)
     {
         controllReceivingSystem.EndSkillE(context);
+    }
+    public void UseUltimate(InputAction.CallbackContext context)
+    {
+        controllReceivingSystem.Ultimate(context);
+    }
+    public void cancleUltimate(InputAction.CallbackContext context)
+    {
+        controllReceivingSystem.cancleUltimate(context);
     }
 
     #endregion

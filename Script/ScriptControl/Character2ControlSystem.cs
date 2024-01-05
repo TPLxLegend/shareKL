@@ -189,6 +189,25 @@ public class Character2ControlSystem : CharacterControlSystem
             itemPooling.Instance.spawnPrefabServerRpc(NetworkManager.LocalClientId, "machineGun", pointSpamwMachineGun, Quaternion.identity);
         }
     }
+
+    public override void SkillUltimate(InputAction.CallbackContext ctx)
+    {
+        base.SkillUltimate(ctx);
+        if (!canUseUltimate()) return;
+        GameObject cutSceneUltimateSystem = GameObject.Find("ultimate").gameObject;
+        if (cutSceneUltimateSystem == null) return;
+        ActionUltimateCutScene action = cutSceneUltimateSystem.GetComponent<ActionUltimateCutScene>();
+        if (action == null) return;
+        //Play ultimates
+        aniSetLayerWeightServerRpc(animator.GetLayerIndex("LayerHand"), 0f);
+        aniplayServerRpc("ultimate");
+        action.ActionUltimate(controllReceivingSystem.transform.position, controllReceivingSystem.transform.rotation);
+    }
+    public override void cancleUltimate(InputAction.CallbackContext ctx)
+    {
+        base.cancleUltimate(ctx);  
+    }
+
     bool isPlacingMachineGun=false;
     IEnumerator checkPointSpawn()
     {
@@ -235,7 +254,7 @@ public class Character2ControlSystem : CharacterControlSystem
     private bool CanRun()
     {
         if (playerstate != playerState.normal) { return false; }
-
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ultimate")) { return false; }
         if (!controllReceivingSystem.characterController.isGrounded) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f) return false;
         return true;
@@ -279,6 +298,7 @@ public class Character2ControlSystem : CharacterControlSystem
     }
     private bool canJump()
     {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ultimate")) { return false; }
         if (!controllReceivingSystem.CheckGrounded()) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ATK")) { return false; }
@@ -286,6 +306,16 @@ public class Character2ControlSystem : CharacterControlSystem
         return true;
     }
     private bool canUseSkillE()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ultimate")) { return false; }
+        if (!controllReceivingSystem.CheckGrounded()) { return false; }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9) { return false; }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ATK")) { return false; }
+        if (playerstate != playerState.normal) { return false; }
+        return true;
+    }
+
+    private bool canUseUltimate()
     {
         if (!controllReceivingSystem.CheckGrounded()) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9) { return false; }
@@ -295,6 +325,7 @@ public class Character2ControlSystem : CharacterControlSystem
     }
     private bool CanATK()
     {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ultimate")) { return false; }
         if (!controllReceivingSystem.CheckGrounded()) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9) { return false; }
         if (curBullet < 1) { return false; }

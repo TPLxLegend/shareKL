@@ -23,6 +23,9 @@ abstract public class CharacterControlSystem : NetworkBehaviour// MonoBehaviour
 
     public virtual void skillE(InputAction.CallbackContext ctx) { }
     public virtual void endShillE(InputAction.CallbackContext ctx) { }
+    public virtual void SkillUltimate(InputAction.CallbackContext ctx) { }
+    public virtual void cancleUltimate(InputAction.CallbackContext ctx) { }
+
 
 
     [ServerRpc(RequireOwnership = false)]

@@ -139,6 +139,21 @@ PrefabInstance:
       propertyPath: m_AABB.m_Extent.z
       value: 0.052704595
       objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 05e129f00c484d6478e6e73c41e813fc,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[1]
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 05e129f00c484d6478e6e73c41e813fc,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[2]
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 05e129f00c484d6478e6e73c41e813fc,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[3]
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 05e129f00c484d6478e6e73c41e813fc,
         type: 3}
       propertyPath: m_Name
@@ -256,7 +271,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 77527bd77f122fe4b95b377afc2075d3,
         type: 3}
       propertyPath: m_RootOrder
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 77527bd77f122fe4b95b377afc2075d3,
         type: 3}
@@ -2949,6 +2964,7 @@ MonoBehaviour:
     m_Bits: 1
   shadowMachineGun: {fileID: 1569766820532909738, guid: a85e0c073fe3ebf4bb4bd55b22378f85,
     type: 3}
+  pointSpamwMachineGun: {x: 0, y: 0, z: 0}
   bulletTransform: {fileID: 1708871090973689660}
   bulletSpeed: 100
 --- !u!114 &6231664601168664896
