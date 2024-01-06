@@ -47,10 +47,15 @@ public class MachineGun : MonoBehaviour
         {
             ReloadBuleet();
         }
-        if (AttackMode)
+        if (AttackMode && TargetList.Count > 0f)
         {
             //body
-            Vector3 betweenEnemeBody = GetTargetNearest().transform.position - body.transform.position;
+            Vector3 trans = GetTargetNearest().transform.position;
+            Vector3 betweenEnemeBody = trans - body.transform.position;
+            if(betweenEnemeBody == null)
+            {
+                return;
+            }
             float eulerbody = Mathf.Atan2(betweenEnemeBody.x, betweenEnemeBody.z) * Mathf.Rad2Deg;
             float eulerbodySmooth = Mathf.SmoothDampAngle(body.transform.eulerAngles.y, eulerbody, ref turnSmoothVelocity, turnSmoothtime);
             body.transform.rotation = Quaternion.Euler(0f, eulerbodySmooth, 0f);

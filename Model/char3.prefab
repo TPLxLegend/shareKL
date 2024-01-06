@@ -2946,6 +2946,7 @@ MonoBehaviour:
   animator: {fileID: 0}
   controllReceivingSystem: {fileID: 0}
   aimPoint: {fileID: 0}
+  sdSkill: {fileID: 0}
   runStyle: 1
   playerstate: 0
   shootState: 0
@@ -2986,7 +2987,7 @@ MonoBehaviour:
   teamID: 0
   maxMP: 5
   attack: 10
-  critRate: 5
+  critRate: 50
   critDmg: 50
   speed: 1
   chainEffect: []

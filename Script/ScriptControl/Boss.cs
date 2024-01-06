@@ -13,7 +13,8 @@ public class Boss : MonoBehaviour
     public bool action = false;
     public bool attack = false;
     public float timecount = 10f;
-    public GameObject superBullet;
+
+    public GameObject superBullet; 
     public GameObject pointspawn;
     public GameObject target;
 
@@ -31,10 +32,9 @@ public class Boss : MonoBehaviour
     private float timeReload = 3f;
     private float curTimeReload = 0f;
     private float timeShootBigBullet = 0f;
+    private float delayshoot = 0f;
     void Start()
     {
-        GetComponent<dissolve>().RunDisolve();
-
         curButllet = maxNumButllet;
         info=GetComponent<enemyInfo>();
         slider.maxValue = info.maxHP;
@@ -74,19 +74,29 @@ public class Boss : MonoBehaviour
             }
             if(target != null)
             {
-                Vector3 dir = target.transform.position + new Vector3(0f,1f,0f) + new Vector3(Random.Range(-2f,2f), Random.Range(-2f, 2f), Random.Range(-2f, 2f)) - transform.position;
+                Vector3 dir = target.transform.position + new Vector3(0f,0f,0f) + new Vector3(Random.Range(-2f,2f), Random.Range(0, 2f), Random.Range(-2f, 2f)) - transform.position;
                 Vector3 dirForward = transform.forward;
                 dirForward = Vector3.SmoothDamp(dirForward, dir, ref turnSmoothVelocityV3, turnSmoothtime * 2f);
                 Quaternion lookRotation = Quaternion.LookRotation(dirForward);
                 transform.rotation = lookRotation;
+
+                timeShootBigBullet += Time.deltaTime;
+                if(timeShootBigBullet >10f)
+                {
+                    timeShootBigBullet = 0f;
+                    delayshoot = 2f;
+                    spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,
+              15f, pointspawn.transform.position, lookRotation, info.farAttackDmgType,100, info.critRate, info.critDmg,superBullet.name);
+                }
             }
         }
         else
             attack = false;
-        if (attack && curButllet > 0)
+        if (attack && curButllet > 0 &&delayshoot<0f)
         {
             shoot(transform.rotation);
         }
+        delayshoot-=Time.deltaTime;
         if (timeShootBigBullet > 10f)
         {
             //ban nig bullet;
