@@ -3,6 +3,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.AdaptivePerformance.Provider.AdaptivePerformanceSubsystemDescriptor;
 
 public class MachineGun : MonoBehaviour
 {
@@ -28,16 +29,20 @@ public class MachineGun : MonoBehaviour
     private float timeReload = 4f;
     private float curTimeReload = 0f;
 
+    public float timeLife;
+
     public TextMeshProUGUI textMeshProUGUI;
     public Slider slider;
     void Start()
     {
         curButllet = maxNumButllet;
+        timeLife = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(Time.time - timeLife > 10f) { Destroy(gameObject); }
         if (reload)
         {
             ReloadBuleet();
@@ -114,13 +119,16 @@ public class MachineGun : MonoBehaviour
     {
         if (Time.time - tmp > 0.1f)
         {
+            var info = PlayerController.Instance.playerInfo;
             if (tmpshoot)
             {
-                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, bulletSpeed, pointRight.position, dir);
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,
+                    bulletSpeed, pointRight.position, dir,DmgType.Fire, info.attack/2, info.critRate, info.critDmg);
             }
             else
             {
-                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, bulletSpeed, pointLeft.position, dir);
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, 
+                    bulletSpeed, pointLeft.position, dir, DmgType.Fire, info.attack / 2, info.critRate, info.critDmg);
             }
             tmpshoot = !tmpshoot;
             tmp = Time.time;

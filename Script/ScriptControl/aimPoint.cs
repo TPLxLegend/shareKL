@@ -74,12 +74,16 @@ public class aimPoint : MonoBehaviour
         curDistance = distance;
         bulletNum.SetText(num.ToString());
     }
+    public void setBullet(float num)
+    {
+        bulletNum.SetText(num.ToString());
+    }
     public void SetPosAimPoint(float x,float y)
     {
         float tmpx = transform.localPosition.x;
         float tmpy = transform.localPosition.y;
-        tmpx += x * 3f;
-        tmpy += y * 3f;
+        tmpx += x * 2f;
+        tmpy += y * 2f;
         float xpos, ypos;
         if(isBetween(tmpx,-760f,760f))
             xpos = tmpx;

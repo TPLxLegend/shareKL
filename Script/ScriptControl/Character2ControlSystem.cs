@@ -9,7 +9,7 @@ public class Character2ControlSystem : CharacterControlSystem
     private ControllReceivingSystem controllReceivingSystem;
 
     public aimPoint aimPoint;
-
+    public SDSkill sdSkill;
 
 
     //Paremeter Animator
@@ -43,13 +43,20 @@ public class Character2ControlSystem : CharacterControlSystem
     public GameObject shadowMachineGun;
     public Vector3 pointSpamwMachineGun = Vector3.zero;
 
+    //CD skill
+    private float CDSkillE = 10f;
+    private float CDSkillQ = 20f;
+    private float curCDSkillE = 11f;
+    private float curCDSkillQ = 21f;
     void Start()
     {
         animator = transform.GetComponent<Animator>();
 
         controllReceivingSystem = transform.parent.GetComponentInParent<ControllReceivingSystem>();
-        ResetTele();
+        
         aimPoint = GameObject.Find("AimCanvas/aimPoint").GetComponent<aimPoint>();
+        sdSkill = GameObject.Find("AimCanvas/SDSkill").GetComponent<SDSkill>();
+        ResetTele();
     }
     private void Awake()
     {
@@ -74,9 +81,19 @@ public class Character2ControlSystem : CharacterControlSystem
         }
         //luu gia tri cho action Jump
         dirFowardJump = targetAngle + Camera.main.transform.eulerAngles.y;
-
+        CDSkill();
 
     }
+
+    public void CDSkill()
+    {
+        curCDSkillE += Time.deltaTime;
+        curCDSkillQ += Time.deltaTime;
+        if (curCDSkillE >= CDSkillE) { curCDSkillE = CDSkillE; }
+        if (curCDSkillQ >= CDSkillQ) { curCDSkillQ = CDSkillQ; }
+        sdSkill.setCD(curCDSkillE / 10f, curCDSkillQ / 20f,(CDSkillE - curCDSkillE).ToString("F1"),(CDSkillQ - curCDSkillQ).ToString("F1"));
+    }
+
     public override void UseMovement(InputAction.CallbackContext ctx)
     {
         base.UseMovement(ctx);
@@ -176,8 +193,11 @@ public class Character2ControlSystem : CharacterControlSystem
         base.skillE(ctx);
         if (canUseSkillE())
         {
+
             StartCoroutine(checkPointSpawn());
         }
+        else
+            pointSpamwMachineGun = Vector3.zero;
     }
     public override void endShillE(InputAction.CallbackContext ctx)
     {
@@ -185,6 +205,7 @@ public class Character2ControlSystem : CharacterControlSystem
         isPlacingMachineGun = false;
         if (pointSpamwMachineGun != Vector3.zero)
         {
+            curCDSkillE = 0.1f;
             itemPooling.Instance.spawnPrefabServerRpc(NetworkManager.LocalClientId, "MachineGun", pointSpamwMachineGun, Quaternion.identity);
         }
     }
@@ -192,6 +213,7 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         base.SkillUltimate(ctx);
         if (!canUseUltimate()) return;
+        curCDSkillQ = 0.1f;
         GameObject cutSceneUltimateSystem = GameObject.Find("ultimate").gameObject;
         if (cutSceneUltimateSystem == null) return;
         ActionUltimateCutScene action = cutSceneUltimateSystem.GetComponent<ActionUltimateCutScene>();
@@ -199,7 +221,20 @@ public class Character2ControlSystem : CharacterControlSystem
         //Play ultimates
         aniSetLayerWeightServerRpc(animator.GetLayerIndex("LayerHand"), 0f);
         aniplayServerRpc("ultimate");
+        curBullet += 50;
+
+        aimPoint.shoot(curBullet);
+        var info = PlayerController.Instance.playerInfo;
+        info.healing(50);
+        StartCoroutine( ultimateBuffDmg(2, 15, info));
         action.ActionUltimate(controllReceivingSystem.transform.position, controllReceivingSystem.transform.rotation);
+    }
+    IEnumerator ultimateBuffDmg(int scale,int duration,playerInfo info)
+    {
+        int tmp = info.attack;
+        info.attack=tmp*scale;
+        yield return new WaitForSeconds(duration);
+        info.attack = tmp;
     }
     public override void cancleUltimate(InputAction.CallbackContext ctx)
     {
@@ -247,6 +282,7 @@ public class Character2ControlSystem : CharacterControlSystem
         dirShootRun = new Vector2(0f, 0f);
         curBullet = maxBullet;
         shootWhenSitDown = false;
+        aimPoint.setBullet(curBullet);
     }
 
     //////////// Ham cua chinh no/////
@@ -306,6 +342,7 @@ public class Character2ControlSystem : CharacterControlSystem
     }
     private bool canUseSkillE()
     {
+        if(curCDSkillE<CDSkillE) return false;
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ultimate")) { return false; }
         if (!controllReceivingSystem.CheckGrounded()) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9) { return false; }
@@ -316,6 +353,7 @@ public class Character2ControlSystem : CharacterControlSystem
 
     private bool canUseUltimate()
     {
+        if (curCDSkillQ < CDSkillQ) return false;
         if (!controllReceivingSystem.CheckGrounded()) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("ATK")) { return false; }
@@ -412,14 +450,16 @@ public class Character2ControlSystem : CharacterControlSystem
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(aimPoint.GetLocalPos().x + 960f, aimPoint.GetLocalPos().y + 540f, 0f));
             RaycastHit hit;
             float tl = 0.02f;
-            if (Physics.Raycast(ray, out hit, 1000f, ignoreShoot, queryTriggerInteraction: QueryTriggerInteraction.Ignore))
+            var info = PlayerController.Instance.playerInfo;
+            if (Physics.Raycast(ray, out hit, 1000f, ignoreShoot, queryTriggerInteraction: QueryTriggerInteraction.Ignore)) 
             {
                 var length = ((hit.point - bulletTransform.position).magnitude);    //hit.distance;
                 Vector3 range = new Vector3(Random.Range(-tl * length, tl * length), Random.Range(-tl * length, tl * length), Random.Range(-tl * length, tl * length));
                 Debug.LogWarning("Ke qua Rangdom:  " + range);
                 range += hit.point;
                 Quaternion rot = Quaternion.LookRotation(range - bulletTransform.position);
-                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, bulletSpeed, bulletTransform.position, rot);
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,
+                    bulletSpeed, bulletTransform.position, rot,DmgType.Electric,info.attack,info.critRate,info.critDmg);
                 Debug.Log("shooting hit point: " + hit.point + " name:" + hit.transform.name);
             }
             else
@@ -430,7 +470,8 @@ public class Character2ControlSystem : CharacterControlSystem
                 Debug.LogWarning("Ke qua Rangdom Maxxx:  " + range);
                 range += endPoint;
                 Quaternion rot = Quaternion.LookRotation(range - bulletTransform.position);
-                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, bulletSpeed, bulletTransform.position, rot);
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, 
+                    bulletSpeed, bulletTransform.position, rot, DmgType.Electric, info.attack, info.critRate, info.critDmg);
                 Debug.Log("shooting raycast not hit every thing so we use the endpoint");
             }
 
@@ -439,6 +480,7 @@ public class Character2ControlSystem : CharacterControlSystem
 
     public void ReLoadBullet()
     {
+        if (animator.GetCurrentAnimatorStateInfo(1).IsName("Reload")) return;
         aniSetLayerWeightServerRpc(animator.GetLayerIndex("LayerHand"), 1f);
         aniplayServerRpc("LayerHand.Reload");
     }
@@ -450,6 +492,7 @@ public class Character2ControlSystem : CharacterControlSystem
     {
         aniSetLayerWeightServerRpc(animator.GetLayerIndex("LayerHand"), 0f);
         curBullet = maxBullet;
+        aimPoint.setBullet(curBullet);
     }
     public void DashEnd()
     {
