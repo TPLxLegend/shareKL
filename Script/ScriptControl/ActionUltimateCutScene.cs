@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
-using Unity.UI;
+using UnityEngine.UI;
 using System.Threading.Tasks;
 
 public class ActionUltimateCutScene : MonoBehaviour
@@ -22,15 +22,15 @@ public class ActionUltimateCutScene : MonoBehaviour
     {
         
     }
-    public async void ActionUltimate(Vector3 position, Quaternion quater)
+    public  void ActionUltimate(Vector3 position, Quaternion quater)
     {
         transform.position = position;
         transform.rotation = quater;
         playableDirector.Play();
         Debug.Log("duration"+playableDirector.duration);
-        screen.SetInt("_useEffect", 1);
-        await Task.Delay((int)(playableDirector.duration * 1000));
-        screen.SetInt("_useEffect", 0);
+        //screen.SetInt("_useEffect", 1);
+        //await Task.Delay((int)(playableDirector.duration * 1000));
+       // screen.SetInt("_useEffect", 0);
         Debug.Log("state:"+screen.GetInt("_useEffect")+"after turn off : " + Time.time);
     }
     public void disableUI()

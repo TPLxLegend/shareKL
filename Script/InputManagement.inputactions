@@ -89,17 +89,6 @@
             ],
             "bindings": [
                 {
-                    "name": "",
-                    "id": "d00764e5-c4c7-4d3d-ba3e-6032a1072ba0",
-                    "path": "<Gamepad>/leftStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "WASD",
                     "id": "3c352b91-9fd6-4939-bd57-a70856513326",
                     "path": "2DVector",
@@ -153,17 +142,6 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "ec9b19d6-36d6-46c8-a7d0-cd4e8a1455de",
-                    "path": "<Gamepad>/rightStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 },
                 {
                     "name": "",

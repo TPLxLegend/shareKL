@@ -97,7 +97,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   IgnoreTag: 
-  CameraRadius: 0.001
+  CameraRadius: 0.01
   DampingIntoCollision: 0
   DampingFromCollision: 2
 --- !u!1 &2770230331340181666
