@@ -3,7 +3,6 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.AdaptivePerformance.Provider.AdaptivePerformanceSubsystemDescriptor;
 
 public class MachineGun : MonoBehaviour
 {
@@ -42,7 +41,7 @@ public class MachineGun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Time.time - timeLife > 10f) { Destroy(gameObject); }
+        if (Time.time - timeLife > 10f) { Destroy(gameObject); }
         if (reload)
         {
             ReloadBuleet();
@@ -52,7 +51,7 @@ public class MachineGun : MonoBehaviour
             //body
             Vector3 trans = GetTargetNearest().transform.position;
             Vector3 betweenEnemeBody = trans - body.transform.position;
-            if(betweenEnemeBody == null)
+            if (betweenEnemeBody == null)
             {
                 return;
             }
@@ -128,11 +127,11 @@ public class MachineGun : MonoBehaviour
             if (tmpshoot)
             {
                 spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,
-                    bulletSpeed, pointRight.position, dir,DmgType.Fire, info.attack/2, info.critRate, info.critDmg);
+                    bulletSpeed, pointRight.position, dir, DmgType.Fire, info.attack / 2, info.critRate, info.critDmg);
             }
             else
             {
-                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId, 
+                spawnPlayerSystem.Instance.spawnBulletServerRpc(NetworkManager.Singleton.LocalClientId,
                     bulletSpeed, pointLeft.position, dir, DmgType.Fire, info.attack / 2, info.critRate, info.critDmg);
             }
             tmpshoot = !tmpshoot;

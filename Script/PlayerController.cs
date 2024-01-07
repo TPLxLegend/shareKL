@@ -65,12 +65,12 @@ public class PlayerController : SingletonPersistent<PlayerController>
     }
     void Start()
     {
-        
+
     }
 
     protected void OnDestroy()
     {
-      
+
         toogleEvent(false);
         input.Disable();
     }
