@@ -249,7 +249,7 @@ public class Character2ControlSystem : CharacterControlSystem
         isPlacingMachineGun = true;
         while (isPlacingMachineGun)
         {
-            Ray ray = Camera.main.ScreenPointToRay(new Vector3(aimPoint.GetLocalPos().x + 960f, aimPoint.GetLocalPos().y + 540f, 0f));
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(aimPoint.GetLocalPos().x + Screen.width / 2f, aimPoint.GetLocalPos().y + Screen.height / 2f, 0f));
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 1000f, ignoreShoot, queryTriggerInteraction: QueryTriggerInteraction.Ignore))
             {
@@ -446,8 +446,8 @@ public class Character2ControlSystem : CharacterControlSystem
             lastTimeShoot = Time.time;
             curBullet -= 1;
             aimPoint.shoot(curBullet);
-            // What is Cai dong nay?? :)))
-            Ray ray = Camera.main.ScreenPointToRay(new Vector3(aimPoint.GetLocalPos().x + 960f, aimPoint.GetLocalPos().y + 540f, 0f));
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(aimPoint.GetLocalPos().x + Screen.width/2f, aimPoint.GetLocalPos().y + Screen.height/2f, 0f));
+            //Ray ray = Camera.main.ScreenPointToRay(new Vector3(aimPoint.GetLocalPos().x , aimPoint.GetLocalPos().y, 0f));
             RaycastHit hit;
             float tl = 0.02f;
             var info = PlayerController.Instance.playerInfo;
@@ -503,7 +503,7 @@ public class Character2ControlSystem : CharacterControlSystem
         shootState = ShootState.none;
         CallToCameraMan(false);
         //aniSetLayerWeightServerRpc(animator.GetLayerIndex("LayerHand"), 0f);
-        if (curBullet != maxBullet)
+        if (curBullet < maxBullet)
             ReLoadBullet();
         aniSetServerRpc("isAtk", false);
         timeCancleFisrtShoot = 0.1f;

@@ -33,6 +33,7 @@ public class Boss : MonoBehaviour
     private float curTimeReload = 0f;
     private float timeShootBigBullet = 0f;
     private float delayshoot = 0f;
+    private bool died = false;
     void Start()
     {
         curButllet = maxNumButllet;
@@ -42,10 +43,12 @@ public class Boss : MonoBehaviour
         {
             slider.value = v2;
         };
+        died = false;
         info.onDie.AddListener(die);
     }
     public void die(characterInfo info)
     {
+        died = true;
         GetComponent<dissolve>().RunDisolve();
         Destroy(gameObject, 10);
     }
@@ -63,6 +66,7 @@ public class Boss : MonoBehaviour
                 transform.position += Vector3.up * 2f * Time.deltaTime;
             }
         }
+        if(died) { return; }
         if(player.Count > 0)
         {
             attack = true;

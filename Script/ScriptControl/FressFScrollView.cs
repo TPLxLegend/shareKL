@@ -39,6 +39,15 @@ public class FressFScrollView : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (listItem.Count == 0)
+        {
+            posHolderList = null;
+            parentCanvas.GetComponent<Canvas>().enabled = false;
+
+            return;
+        }
+        else
+            parentCanvas.GetComponent<Canvas>().enabled = true;
         ShowList();
     }
     private void ShowList()

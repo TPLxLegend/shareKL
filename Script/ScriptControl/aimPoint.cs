@@ -85,21 +85,22 @@ public class aimPoint : MonoBehaviour
         tmpx += x * 2f;
         tmpy += y * 2f;
         float xpos, ypos;
-        if(isBetween(tmpx,-760f,760f))
+        if (isBetween(tmpx, -(Screen.width/2 ), (Screen.width/2 )))
             xpos = tmpx;
         else
         {
-            if (tmpx < -760f) { xpos = -760f; }
-            else { xpos = 760f; }
+            if (tmpx < -(Screen.width/2)) { xpos = -(Screen.width / 2); }
+            else { xpos = (Screen.width / 2); }
         }
-        if (isBetween(tmpy, -420f, 420f))
+        if (isBetween(tmpy, -(Screen.height/2), (Screen.height / 2)))
             ypos = tmpy;
         else
         {
-            if (tmpy < -420f) { ypos = -420f; }
-            else { ypos = 420f; }
+            if (tmpy < -(Screen.height / 2)) { ypos = -(Screen.height / 2); }
+            else { ypos = (Screen.height / 2); }
         }
-        transform.localPosition = new Vector3(xpos,ypos,0f);
+        transform.localPosition = new Vector3(xpos, ypos, 0f);
+
     }
     public void ResetAimPos()
     {

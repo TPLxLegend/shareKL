@@ -138,7 +138,7 @@ public class ControllReceivingSystem : MonoBehaviour
         float targetAngle = Mathf.Atan2(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y) * Mathf.Rad2Deg;
         DirmoveInputForWindForce = targetAngle + Camera.main.transform.eulerAngles.y;
         ForwardWindForce = true;
-        forceFallFoward = 3f;
+        forceFallFoward = 15f;
     }
     public void cancleMovement()
     {

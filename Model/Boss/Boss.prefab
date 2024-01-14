@@ -479,7 +479,7 @@ Transform:
   - {fileID: 3390257086180151128}
   - {fileID: 7534375177390497987}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &2119699427478375083
 SkinnedMeshRenderer:
@@ -658,7 +658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp:
     m_InternalValue: 0
-  maxHP: 1000
+  maxHP: 300
   mp: 0
   teamID: 0
   maxMP: 0
@@ -785,7 +785,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.352
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
